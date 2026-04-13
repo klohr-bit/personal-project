@@ -1,0 +1,1530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Use of Force — Keystone PD Field Training</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Bebas+Neue&family=JetBrains+Mono:wght@400;500&family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --black:       #08090B;
+  --dark:        #0E1117;
+  --dark-mid:    #151B24;
+  --dark-card:   #1A2130;
+  --navy:        #0A1628;
+  --gold:        #C9A84C;
+  --gold-bright: #E8C66A;
+  --gold-dim:    rgba(201,168,76,0.12);
+  --gold-border: rgba(201,168,76,0.3);
+  --silver:      #8A9AB0;
+  --silver-pale: rgba(138,154,176,0.1);
+  --white:       #EEF2F7;
+  --white-dim:   rgba(238,242,247,0.65);
+  --white-faint: rgba(238,242,247,0.3);
+  --red:         #C0392B;
+  --red-pale:    rgba(192,57,43,0.12);
+  --red-bright:  #E74C3C;
+  --green:       #27AE60;
+  --green-pale:  rgba(39,174,96,0.12);
+  --green-text:  #2ECC71;
+  --border:      rgba(138,154,176,0.1);
+  --border-gold: rgba(201,168,76,0.25);
+  --mono: 'JetBrains Mono', monospace;
+  --display: 'Oswald', sans-serif;
+  --sans: 'Inter', sans-serif;
+}
+html { scroll-behavior: smooth; }
+body { font-family: var(--sans); background: var(--black); color: var(--white); min-height: 100vh; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+.skip { position: absolute; top: -60px; left: 0; background: var(--gold); color: var(--black); padding: 8px 16px; font-weight: 700; z-index: 200; text-decoration: none; }
+.skip:focus { top: 0; }
+
+/* SCREENS */
+.screen { display: none; min-height: 100vh; }
+.screen.active { display: flex; flex-direction: column; }
+
+/* TOPBAR */
+.topbar {
+  height: 58px;
+  background: var(--navy);
+  border-bottom: 2px solid var(--gold);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.logo { display: flex; align-items: center; gap: 12px; }
+.logo-mark {
+  width: 36px; height: 36px;
+  flex-shrink: 0;
+}
+.logo-text {}
+.logo-dept {
+  font-family: var(--display);
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: var(--white);
+  line-height: 1;
+  text-transform: uppercase;
+}
+.logo-sub {
+  font-family: var(--mono);
+  font-size: 8px;
+  color: var(--gold);
+  letter-spacing: 0.1em;
+  margin-top: 2px;
+}
+.module-tag {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--gold);
+  border: 1px solid var(--border-gold);
+  border-radius: 2px;
+  padding: 3px 10px;
+  letter-spacing: 0.1em;
+}
+
+/* PROGRESS */
+.prog-wrap {
+  height: 4px;
+  background: var(--dark-mid);
+  flex-shrink: 0;
+  position: sticky;
+  top: 58px;
+  z-index: 99;
+}
+.prog-fill {
+  height: 100%;
+  background: var(--gold);
+  transition: width 0.6s cubic-bezier(0.4,0,0.2,1);
+  width: 0%;
+}
+
+/* ANIMATIONS */
+@keyframes slideUp { from { opacity:0; transform:translateY(28px); } to { opacity:1; transform:translateY(0); } }
+@keyframes fadeIn  { from { opacity:0; } to { opacity:1; } }
+@keyframes pulse   { 0%,100%{ opacity:1; } 50%{ opacity:0.4; } }
+@keyframes scanDown { from { transform:translateY(-100%); opacity:0.06; } to { transform:translateY(100vh); opacity:0; } }
+.anim-up   { animation: slideUp 0.5s cubic-bezier(0.4,0,0.2,1) both; }
+.d1{animation-delay:.1s} .d2{animation-delay:.2s} .d3{animation-delay:.3s} .d4{animation-delay:.4s} .d5{animation-delay:.5s}
+
+/* NAME SCREEN */
+.name-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 48px 28px;
+  max-width: 560px;
+  margin: 0 auto;
+  width: 100%;
+}
+.badge-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+.badge-line {
+  width: 32px; height: 2px;
+  background: var(--gold);
+}
+.badge-text {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--gold);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.name-h1 {
+  font-family: var(--display);
+  font-size: clamp(48px, 9vw, 76px);
+  font-weight: 700;
+  line-height: 0.92;
+  letter-spacing: 0.06em;
+  color: var(--white);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.name-h1 em { font-style: normal; color: var(--gold); }
+.name-sub {
+  font-size: 15px;
+  color: var(--white-dim);
+  line-height: 1.7;
+  margin-bottom: 36px;
+  max-width: 420px;
+}
+.input-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--white-faint);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 8px;
+}
+.name-input {
+  width: 100%;
+  font-family: var(--sans);
+  font-size: 17px;
+  font-weight: 500;
+  color: var(--white);
+  background: var(--dark-card);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 15px 18px;
+  transition: border-color 0.2s;
+  margin-bottom: 16px;
+  letter-spacing: 0.02em;
+}
+.name-input:focus { outline: none; border-color: var(--gold); }
+.name-input::placeholder { color: var(--white-faint); font-size: 14px; }
+
+/* DISCLAIMER */
+.disclaimer {
+  background: rgba(201,168,76,0.06);
+  border: 1px solid var(--border-gold);
+  border-left: 3px solid var(--gold);
+  border-radius: 0 4px 4px 0;
+  padding: 12px 14px;
+  font-size: 12px;
+  color: var(--white-faint);
+  line-height: 1.7;
+  margin-bottom: 20px;
+}
+.disclaimer strong { color: var(--gold); }
+
+/* BUTTONS */
+.btn {
+  font-family: var(--display);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 13px 28px;
+  border-radius: 3px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.btn-gold { background: var(--gold); color: var(--black); }
+.btn-gold:hover:not(:disabled) { background: var(--gold-bright); }
+.btn-gold:disabled { opacity: 0.3; cursor: default; }
+.btn-outline { background: transparent; color: var(--silver); border: 1px solid var(--border); }
+.btn-outline:hover { border-color: var(--silver); color: var(--white); }
+.btn-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 24px; }
+.btn-arrow::after { content: '→'; }
+
+/* HERO PANEL */
+.hero-panel {
+  flex: 1;
+  min-height: 65vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 0 28px 44px;
+  position: relative;
+  overflow: hidden;
+}
+.hero-bg { position: absolute; inset: 0; z-index: 0; }
+.hero-bg svg { width: 100%; height: 100%; }
+.hero-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(8,9,11,0.97) 35%, rgba(8,9,11,0.6) 100%);
+  z-index: 1;
+}
+.hero-scanline {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(to bottom, rgba(201,168,76,0.15), transparent);
+  animation: scanDown 4s linear infinite;
+  z-index: 2;
+  pointer-events: none;
+}
+.hero-content { position: relative; z-index: 3; max-width: 680px; }
+.incident-tag {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--red-bright);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.pulse-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--red-bright);
+  animation: pulse 1.5s infinite;
+}
+.hero-title {
+  font-family: var(--display);
+  font-size: clamp(44px, 8vw, 72px);
+  font-weight: 700;
+  line-height: 0.92;
+  letter-spacing: 0.06em;
+  color: var(--white);
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+.hero-title em { font-style: normal; color: var(--gold); }
+.hero-body { font-size: 15px; color: var(--white-dim); line-height: 1.72; max-width: 520px; }
+.hero-body strong { color: var(--white); }
+
+/* SECTION */
+.section { padding: 36px 28px; max-width: 680px; margin: 0 auto; width: 100%; }
+.section-h {
+  font-family: var(--display);
+  font-size: clamp(32px, 6vw, 52px);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--white);
+  text-transform: uppercase;
+  line-height: 0.92;
+  margin-bottom: 8px;
+}
+.section-h em { font-style: normal; color: var(--gold); }
+.section-sub { font-size: 14px; color: var(--white-dim); line-height: 1.7; margin-bottom: 24px; }
+
+/* EYEBROW */
+.eyebrow {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--gold);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.eyebrow::before { content: ''; width: 20px; height: 1px; background: var(--gold); }
+
+/* CARDS */
+.card {
+  background: var(--dark-card);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 20px;
+  margin-bottom: 14px;
+}
+.card-gold {
+  background: var(--gold-dim);
+  border: 1px solid var(--border-gold);
+  border-radius: 4px;
+  padding: 16px 20px;
+  margin-bottom: 14px;
+}
+.card-steel {
+  background: var(--silver-pale);
+  border: 1px solid rgba(138,154,176,0.2);
+  border-radius: 4px;
+  padding: 16px 20px;
+  margin-bottom: 14px;
+}
+
+/* STATUTE BOX */
+.statute {
+  background: var(--navy);
+  border: 1px solid var(--border-gold);
+  border-radius: 4px;
+  padding: 16px 20px;
+  margin: 14px 0;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: #8AAAC8;
+  line-height: 2;
+}
+.statute .hi { color: var(--gold-bright); }
+.statute .ref { color: var(--silver); opacity: 0.7; font-size: 10px; }
+
+/* CALLOUT */
+.callout {
+  background: var(--silver-pale);
+  border-left: 2px solid var(--silver);
+  border-radius: 0 4px 4px 0;
+  padding: 12px 16px;
+  font-size: 14px;
+  color: var(--white-dim);
+  line-height: 1.7;
+  margin: 12px 0;
+}
+.callout strong { color: var(--silver); }
+
+.alert {
+  background: var(--red-pale);
+  border-left: 2px solid var(--red-bright);
+  border-radius: 0 4px 4px 0;
+  padding: 12px 16px;
+  font-size: 14px;
+  color: #E87070;
+  line-height: 1.7;
+  margin: 12px 0;
+}
+
+.success-box {
+  background: var(--green-pale);
+  border-left: 2px solid var(--green);
+  border-radius: 0 4px 4px 0;
+  padding: 12px 16px;
+  font-size: 14px;
+  color: var(--green-text);
+  line-height: 1.7;
+  margin: 12px 0;
+}
+
+/* BODY TEXT */
+.body-text { font-size: 15px; color: var(--white-dim); line-height: 1.75; }
+.body-text strong { color: var(--white); }
+
+/* SPEC ROWS */
+.spec-row {
+  display: flex;
+  align-items: flex-start;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+  gap: 16px;
+}
+.spec-row:last-child { border-bottom: none; }
+.spec-key {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--white-faint);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  min-width: 130px;
+  flex-shrink: 0;
+  padding-top: 2px;
+}
+.spec-val { font-size: 14px; color: var(--white-dim); line-height: 1.6; }
+
+/* OBJECTIVES */
+.obj-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+}
+.obj-item:last-child { border-bottom: none; }
+.obj-n {
+  font-family: var(--display);
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--gold);
+  line-height: 1;
+  flex-shrink: 0;
+  width: 28px;
+  opacity: 0.5;
+}
+.obj-text { font-size: 15px; color: var(--white-dim); line-height: 1.6; }
+.obj-text strong { color: var(--white); }
+
+/* PRIOR KNOWLEDGE */
+.pk-wrap { margin-bottom: 28px; }
+.pk-q { font-size: 16px; font-weight: 600; color: var(--white); margin-bottom: 12px; line-height: 1.5; }
+.pk-options { display: flex; flex-direction: column; gap: 8px; }
+.pk-opt {
+  font-family: var(--sans);
+  font-size: 14px;
+  text-align: left;
+  padding: 13px 16px;
+  border-radius: 3px;
+  border: 1px solid var(--border);
+  background: var(--dark-card);
+  color: var(--white-dim);
+  cursor: pointer;
+  transition: all 0.15s;
+  line-height: 1.55;
+}
+.pk-opt:hover:not(:disabled) { border-color: var(--gold); color: var(--white); background: var(--gold-dim); }
+.pk-opt:disabled { cursor: default; }
+.pk-opt.right  { background: var(--green-pale); border-color: var(--green); color: var(--green-text); }
+.pk-opt.wrong  { background: var(--red-pale); border-color: var(--red-bright); color: #E87070; }
+.pk-opt.reveal { background: var(--green-pale); border-color: var(--green); color: var(--green-text); }
+.pk-fb { font-size: 13px; margin-top: 8px; padding: 10px 14px; border-radius: 0 4px 4px 0; border-left: 2px solid; line-height: 1.65; display: none; }
+.pk-fb.show { display: block; }
+.pk-fb.ok  { background: var(--green-pale); color: var(--green-text); border-color: var(--green); }
+.pk-fb.bad { background: var(--red-pale); color: #E87070; border-color: var(--red-bright); }
+
+/* TEACH PANELS */
+.teach-panel { padding: 0 0 40px; }
+.teach-header {
+  padding: 28px 28px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  background: linear-gradient(to bottom, var(--navy), transparent);
+}
+.teach-num-big {
+  font-family: var(--display);
+  font-size: 68px;
+  line-height: 0.85;
+  color: var(--gold);
+  flex-shrink: 0;
+  opacity: 0.2;
+  font-weight: 700;
+}
+.teach-header-text { flex: 1; }
+.teach-chip {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--gold);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.teach-title {
+  font-family: var(--display);
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--white);
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+/* DIAGRAM */
+.diagram-wrap {
+  margin: 16px 28px;
+  background: var(--dark-card);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 20px;
+  overflow-x: auto;
+}
+.diagram-cap {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--white-faint);
+  text-align: center;
+  margin-top: 10px;
+  letter-spacing: 0.07em;
+}
+
+/* CONTENT BLOCKS */
+.cb { padding: 0 28px; margin-bottom: 14px; }
+
+/* STANDARD NAV */
+.teach-nav {
+  display: flex;
+  gap: 6px;
+  padding: 14px 28px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  border-top: 1px solid var(--border);
+  margin-top: auto;
+  background: var(--dark);
+}
+.teach-nav::-webkit-scrollbar { display: none; }
+.t-pip {
+  font-family: var(--mono);
+  font-size: 9px;
+  padding: 6px 12px;
+  border-radius: 2px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--white-faint);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s;
+  letter-spacing: 0.06em;
+}
+.t-pip.active { background: var(--gold); border-color: var(--gold); color: var(--black); font-weight: 700; }
+.t-pip.done   { border-color: var(--green); color: var(--green-text); background: var(--green-pale); }
+
+/* TIME GATE */
+.gate-wrap { margin: 0 28px 16px; }
+.gate-bar { height: 2px; background: var(--border); border-radius: 1px; overflow: hidden; }
+.gate-fill { height: 100%; background: var(--gold); border-radius: 1px; width: 100%; }
+.gate-label { font-family: var(--mono); font-size: 9px; color: var(--white-faint); letter-spacing: 0.08em; margin-top: 5px; }
+
+/* SCENARIO */
+.scenario {
+  background: var(--dark-mid);
+  border-left: 3px solid var(--gold);
+  border-radius: 0 6px 6px 0;
+  padding: 18px 20px;
+  margin-bottom: 24px;
+  position: relative;
+  overflow: hidden;
+}
+.scenario::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(to right, var(--gold), transparent); }
+.scenario-tag { font-family: var(--mono); font-size: 9px; color: var(--gold); letter-spacing: 0.12em; margin-bottom: 8px; }
+.scenario-text { font-size: 15px; color: var(--white-dim); line-height: 1.75; }
+.scenario-text strong { color: var(--white); }
+
+/* STEP ITEMS */
+.step-item { display: flex; gap: 16px; padding: 16px 0; border-bottom: 1px solid var(--border); }
+.step-item:last-child { border-bottom: none; }
+.step-n { font-family: var(--display); font-size: 32px; font-weight: 700; color: var(--gold); line-height: 1; flex-shrink: 0; width: 32px; opacity: 0.5; }
+.step-text { font-size: 14px; color: var(--white-dim); line-height: 1.72; }
+.step-text strong { color: var(--white); }
+
+/* ASSESSMENT */
+.assess-card {
+  background: var(--dark-card);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 20px;
+  margin-bottom: 12px;
+  border-left: 3px solid var(--border);
+  transition: border-left-color 0.3s;
+}
+.assess-card.correct   { border-left-color: var(--green); }
+.assess-card.incorrect { border-left-color: var(--red-bright); }
+.assess-chip {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 2px;
+  background: var(--silver-pale);
+  color: var(--silver);
+  border: 1px solid rgba(138,154,176,0.2);
+  display: inline-block;
+  margin-bottom: 10px;
+}
+.assess-q {
+  font-family: var(--display);
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--white);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  line-height: 1.2;
+}
+.assess-ctx { font-size: 14px; color: var(--white-faint); margin-bottom: 14px; line-height: 1.65; }
+.assess-choices { display: flex; flex-direction: column; gap: 8px; }
+.assess-choice {
+  font-family: var(--sans);
+  font-size: 14px;
+  text-align: left;
+  padding: 13px 16px;
+  border-radius: 3px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--white-dim);
+  cursor: pointer;
+  transition: all 0.15s;
+  line-height: 1.55;
+}
+.assess-choice:hover:not(:disabled) { border-color: var(--gold); color: var(--white); background: var(--gold-dim); }
+.assess-choice:disabled { cursor: default; }
+.assess-choice.sel-right { background: var(--green-pale); border-color: var(--green); color: var(--green-text); }
+.assess-choice.sel-wrong { background: var(--red-pale); border-color: var(--red-bright); color: #E87070; }
+.assess-choice.reveal    { background: var(--green-pale); border-color: var(--green); color: var(--green-text); }
+.assess-fb { margin-top: 12px; padding: 13px 16px; font-size: 13px; line-height: 1.7; display: none; border-radius: 0 4px 4px 0; }
+.assess-fb.show { display: block; }
+.assess-fb.ok  { background: var(--green-pale); color: var(--green-text); border-left: 2px solid var(--green); }
+.assess-fb.bad { background: var(--red-pale); color: #E87070; border-left: 2px solid var(--red-bright); }
+
+/* SCORE */
+.score-hero { padding: 48px 28px 32px; }
+.score-eyebrow { font-family: var(--mono); font-size: 9px; color: var(--white-faint); letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 8px; }
+.score-big { font-family: var(--display); font-size: 96px; font-weight: 700; line-height: 0.9; color: var(--white); margin-bottom: 4px; letter-spacing: 0.04em; }
+.score-big em { font-style: normal; color: var(--gold); }
+.score-msg { font-size: 15px; color: var(--white-dim); line-height: 1.65; max-width: 440px; margin-top: 12px; }
+
+.gap-item { display: flex; align-items: flex-start; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); }
+.gap-item:last-child { border-bottom: none; }
+.gap-icon { width: 20px; height: 20px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; margin-top: 1px; }
+.gap-icon.ok   { background: var(--green); color: var(--black); }
+.gap-icon.miss { background: var(--red-bright); color: var(--white); }
+.gap-text { font-size: 14px; color: var(--white-dim); line-height: 1.6; }
+.gap-text strong { color: var(--white); }
+
+.submit-pill { display: none; font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; padding: 6px 14px; border-radius: 20px; margin-top: 12px; }
+.submit-pill.show    { display: inline-block; }
+.submit-pill.sending { background: var(--gold-dim); color: var(--gold); border: 1px solid var(--border-gold); }
+.submit-pill.sent    { background: var(--green-pale); color: var(--green-text); border: 1px solid rgba(39,174,96,0.3); }
+.submit-pill.error   { background: var(--red-pale); color: #E87070; border: 1px solid rgba(192,57,43,0.3); }
+
+/* TRANSFER */
+.xfer-item { display: flex; gap: 16px; padding: 16px 0; border-bottom: 1px solid var(--border); align-items: flex-start; }
+.xfer-item:last-child { border-bottom: none; }
+.xfer-n { font-family: var(--mono); font-size: 16px; font-weight: 500; color: var(--gold); line-height: 1; flex-shrink: 0; width: 24px; padding-top: 2px; }
+.xfer-text { font-size: 14px; color: var(--white-dim); line-height: 1.72; }
+.xfer-text strong { color: var(--white); }
+
+/* CERTIFICATE */
+.cert-screen {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 24px 48px;
+  background: var(--dark);
+}
+.cert-card {
+  background: #F5F3EE;
+  border-radius: 4px;
+  padding: 40px 36px;
+  max-width: 580px;
+  width: 100%;
+  color: #161410;
+  position: relative;
+  overflow: hidden;
+}
+.cert-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 6px; background: linear-gradient(to right, #0A1628, #C9A84C, #0A1628); }
+.cert-card::after  { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px; background: #0A1628; }
+.cert-header { display: flex; align-items: center; gap: 14px; margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid #DDD9D0; }
+.cert-dept-name { font-family: 'Oswald', sans-serif; font-size: 18px; font-weight: 700; letter-spacing: 0.12em; color: #0A1628; text-transform: uppercase; line-height: 1; }
+.cert-dept-sub { font-family: 'JetBrains Mono', monospace; font-size: 8px; color: #8A8070; letter-spacing: 0.1em; margin-top: 3px; }
+.cert-presents { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: #9A9080; letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 6px; }
+.cert-certifies { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #7A7060; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 10px; }
+.cert-name { font-family: 'Oswald', sans-serif; font-size: clamp(34px, 7vw, 50px); font-weight: 700; letter-spacing: 0.04em; color: #0A1628; line-height: 1; margin-bottom: 14px; text-transform: uppercase; }
+.cert-module { font-size: 15px; font-weight: 700; color: #161410; margin-bottom: 4px; }
+.cert-module-sub { font-size: 13px; color: #7A7060; line-height: 1.55; margin-bottom: 20px; }
+.cert-stats { display: flex; gap: 20px; padding: 14px 0; border-top: 1px solid #DDD9D0; border-bottom: 1px solid #DDD9D0; margin-bottom: 18px; }
+.cert-stat {}
+.cert-stat-label { font-family: 'JetBrains Mono', monospace; font-size: 8px; color: #9A9080; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 3px; }
+.cert-stat-val { font-family: 'Oswald', sans-serif; font-size: 24px; font-weight: 700; color: #0A1628; line-height: 1; }
+.cert-stat-val.pass { color: #1A6B3A; }
+.cert-footer { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+.cert-id { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: #9A9080; letter-spacing: 0.06em; }
+.cert-ff { display: flex; align-items: center; gap: 6px; }
+.cert-ff-label { font-family: 'JetBrains Mono', monospace; font-size: 8px; color: #9A9080; letter-spacing: 0.06em; }
+.cert-ff-name { font-size: 11px; font-weight: 700; color: #1B5E8A; }
+.cert-actions { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
+.btn-print { font-family: var(--sans); font-size: 13px; font-weight: 600; padding: 11px 22px; border-radius: 3px; border: 1px solid var(--border); background: transparent; cursor: pointer; color: var(--white-dim); transition: all 0.15s; display: inline-flex; align-items: center; gap: 8px; }
+.btn-print:hover { border-color: var(--white-dim); color: var(--white); }
+
+/* FF CREDIT */
+.ff-credit { margin: 32px 28px 0; background: var(--dark-mid); border-radius: 3px; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; border: 1px solid rgba(29,95,212,0.15); }
+.ff-label { font-family: var(--mono); font-size: 9px; color: var(--white-faint); letter-spacing: 0.07em; }
+.ff-brand { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+.ff-name { font-size: 12px; font-weight: 700; color: #60A5FA; letter-spacing: 0.04em; font-family: var(--display); text-transform: uppercase; }
+
+@media print {
+  body * { visibility: hidden; }
+  .cert-card, .cert-card * { visibility: visible; }
+  .cert-card { position: fixed; top: 0; left: 0; width: 100%; border-radius: 0; padding: 48px; }
+  .cert-actions, .topbar, .prog-wrap { display: none; }
+}
+</style>
+</head>
+<body>
+
+<a href="#main" class="skip">Skip to content</a>
+
+<div class="topbar">
+  <div class="logo">
+    <svg class="logo-mark" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M18 2L4 9V18C4 25.2 10.4 31.6 18 34C25.6 31.6 32 25.2 32 18V9L18 2Z" fill="#0A1628" stroke="#C9A84C" stroke-width="1.5"/>
+      <path d="M18 2L4 9V18C4 25.2 10.4 31.6 18 34C25.6 31.6 32 25.2 32 18V9L18 2Z" fill="none" stroke="#C9A84C" stroke-width="1.5"/>
+      <text x="18" y="22" text-anchor="middle" font-family="'Oswald',sans-serif" font-size="11" font-weight="700" fill="#C9A84C" letter-spacing="0.05em">KPD</text>
+    </svg>
+    <div class="logo-text">
+      <div class="logo-dept">Keystone Police Dept.</div>
+      <div class="logo-sub">FIELD TRAINING PROGRAM // PA MUNICIPAL</div>
+    </div>
+  </div>
+  <div class="module-tag">UOF-01</div>
+</div>
+
+<div class="prog-wrap" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" id="prog-region">
+  <div class="prog-fill" id="prog-fill"></div>
+</div>
+
+<main id="main">
+
+<!-- S0 NAME -->
+<div class="screen active" id="s-name">
+  <div class="name-wrap">
+    <div class="badge-row anim-up">
+      <div class="badge-line"></div>
+      <div class="badge-text">Field Training / Use of Force</div>
+    </div>
+    <h1 class="name-h1 anim-up d1">KEYSTONE<br>POLICE<br><em>TRAINING.</em></h1>
+    <p class="name-sub anim-up d2">Module UOF-01 covers Pennsylvania use of force law, the objective reasonableness standard, and documentation requirements. Your completion is recorded.</p>
+    <div class="disclaimer anim-up d2">
+      <strong>Training disclaimer.</strong> Content in this module is designed for instructional purposes and reflects general Pennsylvania law frameworks. All policies must be verified against your department's current directives, legal counsel guidance, and applicable case law before operational application. This module does not constitute legal advice.
+    </div>
+    <div class="anim-up d3">
+      <label class="input-label" for="lname">Recruit full name and badge number</label>
+      <input type="text" id="lname" class="name-input" placeholder="e.g. Torres, M. — Badge 4471" autocomplete="name" aria-required="true">
+      <div class="btn-row">
+        <button class="btn btn-gold btn-arrow" id="start-btn" onclick="startModule()" disabled>Begin training</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- S1 ATTENTION -->
+<div class="screen" id="s-attention">
+  <div class="hero-panel">
+    <div class="hero-bg">
+      <svg viewBox="0 0 400 560" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+        <rect width="400" height="560" fill="#08090B"/>
+        <line x1="0" y1="80"  x2="400" y2="80"  stroke="#0E1117" stroke-width="1"/>
+        <line x1="0" y1="160" x2="400" y2="160" stroke="#0E1117" stroke-width="1"/>
+        <line x1="0" y1="240" x2="400" y2="240" stroke="#0E1117" stroke-width="1"/>
+        <line x1="0" y1="320" x2="400" y2="320" stroke="#0E1117" stroke-width="1"/>
+        <line x1="0" y1="400" x2="400" y2="400" stroke="#0E1117" stroke-width="1"/>
+        <line x1="0" y1="480" x2="400" y2="480" stroke="#0E1117" stroke-width="1"/>
+        <line x1="100" y1="0" x2="100" y2="560" stroke="#0E1117" stroke-width="1"/>
+        <line x1="200" y1="0" x2="200" y2="560" stroke="#0E1117" stroke-width="1"/>
+        <line x1="300" y1="0" x2="300" y2="560" stroke="#0E1117" stroke-width="1"/>
+        <!-- Keystone shape background -->
+        <path d="M160 100 L200 80 L240 100 L240 180 L200 220 L160 180 Z" fill="none" stroke="#0A1628" stroke-width="20" stroke-linejoin="round"/>
+        <path d="M160 100 L200 80 L240 100 L240 180 L200 220 L160 180 Z" fill="none" stroke="rgba(201,168,76,0.08)" stroke-width="1"/>
+        <!-- Radio lines -->
+        <path d="M50 300 Q100 280 150 300 Q200 320 250 300 Q300 280 350 300" fill="none" stroke="rgba(201,168,76,0.15)" stroke-width="1"/>
+        <path d="M50 320 Q100 300 150 320 Q200 340 250 320 Q300 300 350 320" fill="none" stroke="rgba(201,168,76,0.08)" stroke-width="1"/>
+        <!-- Gold accent lines -->
+        <line x1="0" y1="450" x2="80" y2="450" stroke="#C9A84C" stroke-width="1.5" opacity="0.4"/>
+        <line x1="320" y1="120" x2="400" y2="120" stroke="#C9A84C" stroke-width="1.5" opacity="0.3"/>
+        <!-- Red alert corner -->
+        <rect x="350" y="0" width="50" height="50" fill="rgba(192,57,43,0.15)"/>
+        <line x1="350" y1="0" x2="400" y2="0" stroke="#C0392B" stroke-width="2"/>
+        <line x1="400" y1="0" x2="400" y2="50" stroke="#C0392B" stroke-width="2"/>
+      </svg>
+    </div>
+    <div class="hero-overlay"></div>
+    <div class="hero-scanline"></div>
+    <div class="hero-content anim-up">
+      <div class="incident-tag"><div class="pulse-dot"></div>Critical Policy / Use of Force</div>
+      <h1 class="hero-title">KNOW THE LAW.<br><em>PROTECT</em><br>YOURSELF.</h1>
+      <p class="hero-body anim-up d2">A Keystone officer responds to a combative subject. In 8 seconds, they make a decision that will be reviewed under Pennsylvania law, federal constitutional standards, and department policy. <strong>This module prepares you for that 8 seconds.</strong></p>
+      <div class="btn-row anim-up d3">
+        <button class="btn btn-gold btn-arrow" onclick="goTo('s-objectives')">Begin</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- S2 OBJECTIVES -->
+<div class="screen" id="s-objectives">
+  <div class="section">
+    <div class="eyebrow anim-up">Learning objectives</div>
+    <h2 class="section-h anim-up d1">WHAT YOU WILL<br><em>KNOW.</em></h2>
+    <p class="section-sub anim-up d2">Five legal standards every Keystone officer must be able to apply in the field and articulate in a report.</p>
+    <div class="anim-up d3">
+      <div class="obj-item"><div class="obj-n">1</div><div class="obj-text"><strong>Graham v. Connor</strong> — the federal objective reasonableness standard and its three factors</div></div>
+      <div class="obj-item"><div class="obj-n">2</div><div class="obj-text"><strong>Pennsylvania Title 18 § 508</strong> — when force is justified under state law</div></div>
+      <div class="obj-item"><div class="obj-n">3</div><div class="obj-text"><strong>The force continuum</strong> — de-escalation requirements and proportionality</div></div>
+      <div class="obj-item"><div class="obj-n">4</div><div class="obj-text"><strong>Act 57 of 2020</strong> — documentation and reporting requirements after any use of force</div></div>
+      <div class="obj-item"><div class="obj-n">5</div><div class="obj-text"><strong>Duty to intervene</strong> — your legal obligation when another officer uses excessive force</div></div>
+    </div>
+    <div class="card-steel anim-up d4" style="margin-top:20px;">
+      <strong style="color:var(--white);">How this module works.</strong> <span style="color:var(--white-dim);">Prior knowledge check, then explicit teaching on each standard with legal references, then a worked scenario, then five assessment questions. You receive a gap report by standard at the end.</span>
+    </div>
+    <div class="btn-row anim-up d5">
+      <button class="btn btn-outline" onclick="goTo('s-attention')">Back</button>
+      <button class="btn btn-gold btn-arrow" onclick="goTo('s-prior')">Continue</button>
+    </div>
+  </div>
+</div>
+
+<!-- S3 PRIOR KNOWLEDGE -->
+<div class="screen" id="s-prior">
+  <div class="section">
+    <div class="eyebrow anim-up">Prior knowledge</div>
+    <h2 class="section-h anim-up d1">WHAT DO YOU<br><em>ALREADY KNOW?</em></h2>
+    <p class="section-sub anim-up d2">Three questions before we start. No score. Just activating what you already carry.</p>
+    <div class="anim-up d3">
+      <div class="pk-wrap" id="pk1">
+        <div class="pk-q">The Supreme Court case that established the federal standard for police use of force is:</div>
+        <div class="pk-options">
+          <button class="pk-opt" onclick="pkA(this,'pk1',false,0)">Tennessee v. Garner (1985)</button>
+          <button class="pk-opt" onclick="pkA(this,'pk1',true,1)">Graham v. Connor (1989)</button>
+          <button class="pk-opt" onclick="pkA(this,'pk1',false,2)">Terry v. Ohio (1968)</button>
+        </div>
+        <div class="pk-fb" id="pk1-fb"></div>
+      </div>
+      <div class="pk-wrap" id="pk2">
+        <div class="pk-q">Under Pennsylvania Act 57 of 2020, officers must report a use of force incident:</div>
+        <div class="pk-options">
+          <button class="pk-opt" onclick="pkA(this,'pk2',false,0)">Within 72 hours to the department supervisor</button>
+          <button class="pk-opt" onclick="pkA(this,'pk2',true,1)">To the Pennsylvania State Police via required reporting forms</button>
+          <button class="pk-opt" onclick="pkA(this,'pk2',false,2)">Only if the subject sustained injuries requiring hospitalization</button>
+        </div>
+        <div class="pk-fb" id="pk2-fb"></div>
+      </div>
+      <div class="pk-wrap" id="pk3">
+        <div class="pk-q">The duty to intervene requires an officer to:</div>
+        <div class="pk-options">
+          <button class="pk-opt" onclick="pkA(this,'pk3',false,0)">Report excessive force by another officer within 48 hours</button>
+          <button class="pk-opt" onclick="pkA(this,'pk3',false,1)">Consult a supervisor before intervening in another officer's use of force</button>
+          <button class="pk-opt" onclick="pkA(this,'pk3',true,2)">Physically intervene when another officer is using or about to use excessive force</button>
+        </div>
+        <div class="pk-fb" id="pk3-fb"></div>
+      </div>
+    </div>
+    <div class="btn-row anim-up d4">
+      <button class="btn btn-outline" onclick="goTo('s-objectives')">Back</button>
+      <button class="btn btn-gold btn-arrow" id="pk-next" onclick="goTo('s-teach')" disabled>See the standards</button>
+    </div>
+  </div>
+</div>
+
+<!-- S4 TEACH -->
+<div class="screen" id="s-teach">
+  <div id="teach-page" style="flex:1;display:flex;flex-direction:column;"></div>
+  <div class="teach-nav" id="teach-nav">
+    <button class="t-pip active" onclick="showTeach(0)" id="pip-0">01 GRAHAM</button>
+    <button class="t-pip" onclick="showTeach(1)" id="pip-1">02 PA § 508</button>
+    <button class="t-pip" onclick="showTeach(2)" id="pip-2">03 CONTINUUM</button>
+    <button class="t-pip" onclick="showTeach(3)" id="pip-3">04 ACT 57</button>
+    <button class="t-pip" onclick="showTeach(4)" id="pip-4">05 INTERVENE</button>
+  </div>
+</div>
+
+<!-- S5 WORKED EXAMPLE -->
+<div class="screen" id="s-example">
+  <div class="section">
+    <div class="eyebrow anim-up">Worked example</div>
+    <h2 class="section-h anim-up d1">WALK THE<br><em>INCIDENT.</em></h2>
+    <div class="scenario anim-up d2">
+      <div class="scenario-tag">// SCENARIO — FICTIONAL TRAINING SCENARIO</div>
+      <div class="scenario-text">Officer Torres responds to a domestic disturbance call at 214 Elm Street. Upon arrival, subject Marcus Webb, 34, is in the front yard holding a kitchen knife. Webb is approximately 15 feet away, yelling, and has not yet advanced toward the officer. A neighbor is standing on the adjacent porch, approximately 20 feet from Webb.</div>
+    </div>
+    <div class="anim-up d3">
+      <div class="step-item">
+        <div class="step-n">01</div>
+        <div class="step-text"><strong>Assess the Graham factors immediately.</strong> Severity of crime — domestic disturbance, possible assault. Immediate threat — yes, subject is armed with a knife within potential closing distance. Actively resisting — not yet but verbal commands have not been issued. All three factors present. Use of force is potentially justified but not yet required.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-n">02</div>
+        <div class="step-text"><strong>De-escalation first.</strong> 15 feet with a stationary armed subject and a bystander present creates an opportunity to de-escalate. Officer Torres creates distance, calls for backup, issues clear verbal commands: "Sir, put the knife down. I want to help you." This is not weakness — it is tactically and legally sound. It also establishes the record of attempted de-escalation for any later report.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-n">03</div>
+        <div class="step-text"><strong>Document the threat assessment in real time mentally.</strong> If force becomes necessary, Officer Torres must be able to articulate: what the threat was, why the level of force used was proportional, what alternatives were considered, and what the outcome was. Starting that mental documentation now makes the Act 57 report accurate later.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-n">04</div>
+        <div class="step-text"><strong>If Webb advances.</strong> The calculus changes immediately. Armed subject closing distance with a knife — threat level escalates. The objective reasonableness standard asks: what would a reasonable officer in this situation believe? Lethal or intermediate force may now be justified under both Graham and PA § 508. The bystander's position matters — it affects backdrop considerations.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-n">05</div>
+        <div class="step-text"><strong>Post-incident — Act 57 reporting is mandatory.</strong> Whether or not force was used, if a weapon was displayed and verbal de-escalation commands were issued, document it. If force was used — any force, including pointing a firearm — reporting is required. Torres completes the department use of force form and the PSP report within the required timeframe. Failure to report is a separate policy violation.</div>
+      </div>
+    </div>
+    <div class="callout anim-up d4"><strong>The core principle:</strong> Every use of force decision must be objectively reasonable at the moment it was made — not in hindsight, not with information learned later. Document what you knew and perceived at the time.</div>
+    <div class="btn-row anim-up d5">
+      <button class="btn btn-outline" onclick="goTo('s-teach')">Back to standards</button>
+      <button class="btn btn-gold btn-arrow" onclick="goTo('s-assess')">Take the assessment</button>
+    </div>
+  </div>
+</div>
+
+<!-- S6 ASSESSMENT -->
+<div class="screen" id="s-assess">
+  <div class="section">
+    <div class="eyebrow anim-up">Assessment</div>
+    <h2 class="section-h anim-up d1">APPLY THE<br><em>STANDARD.</em></h2>
+    <p class="section-sub anim-up d2">Five scenarios. Select the best response for each. Your answers are recorded in your training file.</p>
+    <div class="anim-up d3" id="assess-items">
+
+      <div class="assess-card" data-answer="2">
+        <div class="assess-chip">Graham v. Connor</div>
+        <div class="assess-q">The three-factor test</div>
+        <div class="assess-ctx">During a post-incident review, a supervisor asks Officer Torres to justify the level of force used. Which three Graham v. Connor factors must be articulated?</div>
+        <div class="assess-choices">
+          <button class="assess-choice" onclick="assess(this,0)">Weapon type, distance from subject, time of day</button>
+          <button class="assess-choice" onclick="assess(this,1)">Subject's criminal history, number of officers present, availability of backup</button>
+          <button class="assess-choice" onclick="assess(this,2)">Severity of the crime, whether the subject posed an immediate threat, whether the subject was actively resisting or evading arrest</button>
+          <button class="assess-choice" onclick="assess(this,3)">Officer's training level, supervisor approval, department policy compliance</button>
+        </div>
+        <div class="assess-fb ok"  id="a0-right"><strong>Correct.</strong> The Graham three-factor test: severity of the crime at issue, whether the suspect poses an immediate threat to officers or others, and whether the suspect is actively resisting arrest or attempting to evade by flight. These three factors form the foundation of every use of force justification.</div>
+        <div class="assess-fb bad" id="a0-wrong"><strong>Incorrect.</strong> The Graham v. Connor three-factor test focuses on: severity of the crime, immediacy of threat to officers or others, and active resistance or attempt to flee. Criminal history, time of day, and supervisor approval are not part of the Graham standard — though they may be relevant to other analyses.</div>
+      </div>
+
+      <div class="assess-card" data-answer="1">
+        <div class="assess-chip">PA Title 18 § 508</div>
+        <div class="assess-q">Justified use of force</div>
+        <div class="assess-ctx">A subject actively resists arrest by pulling away and attempting to flee on foot. No weapon is visible. Which response best reflects Pennsylvania law on use of force in this situation?</div>
+        <div class="assess-choices">
+          <button class="assess-choice" onclick="assess(this,0)">Deadly force is justified because the subject is fleeing a lawful arrest</button>
+          <button class="assess-choice" onclick="assess(this,1)">Non-deadly force is justified to the extent necessary to effect the arrest, but deadly force requires belief that the subject presents a risk of serious bodily injury</button>
+          <button class="assess-choice" onclick="assess(this,2)">No force is authorized because the subject is unarmed</button>
+          <button class="assess-choice" onclick="assess(this,3)">Force is only justified after a supervisor authorizes it</button>
+        </div>
+        <div class="assess-fb ok"  id="a1-right"><strong>Correct.</strong> Under PA § 508, non-deadly force may be used to effect a lawful arrest when the subject resists. Deadly force is only justified when the officer believes the subject presents a risk of death or serious bodily injury to the officer or others — not simply because the subject is fleeing. Tennessee v. Garner (1985) further restricts deadly force for fleeing suspects.</div>
+        <div class="assess-fb bad" id="a1-wrong"><strong>Incorrect.</strong> PA § 508 authorizes non-deadly force to effect a lawful arrest when there is resistance. Deadly force requires a belief that the subject poses a risk of death or serious bodily injury. A subject fleeing while unarmed does not meet the deadly force threshold. Unarmed does not mean force-free — it means the force level must be proportional.</div>
+      </div>
+
+      <div class="assess-card" data-answer="0">
+        <div class="assess-chip">De-escalation</div>
+        <div class="assess-q">The force continuum</div>
+        <div class="assess-ctx">Officer Chen arrives at a scene where a subject is agitated and verbally abusive but is not physically threatening anyone and has not committed a crime. What is the appropriate first response under Keystone PD policy?</div>
+        <div class="assess-choices">
+          <button class="assess-choice" onclick="assess(this,0)">Verbal de-escalation and crisis communication, maintaining a safe distance</button>
+          <button class="assess-choice" onclick="assess(this,1)">Immediate handcuffing to prevent the situation from escalating</button>
+          <button class="assess-choice" onclick="assess(this,2)">Display of firearm to establish control of the situation</button>
+          <button class="assess-choice" onclick="assess(this,3)">Call for backup before any engagement with the subject</button>
+        </div>
+        <div class="assess-fb ok"  id="a2-right"><strong>Correct.</strong> When no crime has been committed and no immediate physical threat exists, the force continuum begins with officer presence and verbal communication. De-escalation is both a legal requirement and a tactical advantage — it creates a documented record of attempts to resolve the situation without force, which protects the officer if force later becomes necessary.</div>
+        <div class="assess-fb bad" id="a2-wrong"><strong>Incorrect.</strong> With no crime committed and no physical threat, the appropriate response is verbal de-escalation. Handcuffing without legal basis is unlawful detention. Displaying a firearm in a non-threatening situation is an unjustified escalation that could itself create a use of force incident. De-escalation is the required first step.</div>
+      </div>
+
+      <div class="assess-card" data-answer="2">
+        <div class="assess-chip">Act 57 of 2020</div>
+        <div class="assess-q">Reporting requirements</div>
+        <div class="assess-ctx">After an arrest involving physical force, Officer Torres secures the scene and transports the subject. At what point does Act 57 reporting become required, and what triggers it?</div>
+        <div class="assess-choices">
+          <button class="assess-choice" onclick="assess(this,0)">Only if the subject sustained visible injuries requiring medical attention</button>
+          <button class="assess-choice" onclick="assess(this,1)">Only if the subject files a complaint against the officer</button>
+          <button class="assess-choice" onclick="assess(this,2)">Any use of physical force during an arrest or detention, including pointing a firearm, requires reporting to the Pennsylvania State Police</button>
+          <button class="assess-choice" onclick="assess(this,3)">Only if the force used resulted in death or serious bodily injury</button>
+        </div>
+        <div class="assess-fb ok"  id="a3-right"><strong>Correct.</strong> Act 57 of 2020 requires reporting for any use of physical force — not just force resulting in injury. This includes pointing a firearm at a subject. Reports go to the Pennsylvania State Police through the required reporting system. The low threshold is intentional — the law is designed to create a comprehensive record of force incidents statewide.</div>
+        <div class="assess-fb bad" id="a3-wrong"><strong>Incorrect.</strong> Act 57 reporting is triggered by any use of physical force during an arrest or detention — including pointing a firearm. Injury, complaints, and death are not prerequisites. Failure to report when required is a separate policy and potential legal violation. When in doubt, report.</div>
+      </div>
+
+      <div class="assess-card" data-answer="1">
+        <div class="assess-chip">Duty to Intervene</div>
+        <div class="assess-q">Another officer's use of force</div>
+        <div class="assess-ctx">Officer Torres witnesses a fellow officer applying a chokehold to a subject who is already handcuffed and not resisting. The subject is losing consciousness. What does the duty to intervene require?</div>
+        <div class="assess-choices">
+          <button class="assess-choice" onclick="assess(this,0)">Document the incident and report it to a supervisor after the scene is secure</button>
+          <button class="assess-choice" onclick="assess(this,1)">Physically intervene immediately to stop the excessive force, then report the incident through department channels</button>
+          <button class="assess-choice" onclick="assess(this,2)">Verbally warn the officer once, and if force continues, call a supervisor</button>
+          <button class="assess-choice" onclick="assess(this,3)">Defer to the officer who initiated the force, as they have more context about the subject</button>
+        </div>
+        <div class="assess-fb ok"  id="a4-right"><strong>Correct.</strong> The duty to intervene is an active legal obligation under Pennsylvania law and department policy. When an officer observes another using or about to use excessive force, they must physically intervene — not document later, not call a supervisor first, not issue a verbal warning and wait. A handcuffed non-resisting subject being choked is a clear excessive force situation requiring immediate physical intervention.</div>
+        <div class="assess-fb bad" id="a4-wrong"><strong>Incorrect.</strong> The duty to intervene is immediate and physical, not administrative. Waiting, documenting, calling supervisors, or deferring to the initiating officer are all insufficient responses when you are witnessing excessive force in real time. A handcuffed subject who is not resisting has no legal basis for force against them. Your obligation is to intervene now and report after.</div>
+      </div>
+
+    </div>
+    <div class="btn-row anim-up d4">
+      <button class="btn btn-gold btn-arrow" id="results-btn" onclick="goTo('s-results')" disabled>View results</button>
+    </div>
+  </div>
+</div>
+
+<!-- S7 RESULTS -->
+<div class="screen" id="s-results">
+  <div class="section">
+    <div class="eyebrow anim-up">Assessment results</div>
+    <div class="score-hero anim-up d1">
+      <div class="score-eyebrow">MODULE UOF-01 / SCORE</div>
+      <div class="score-big" id="score-display"><em>—</em></div>
+      <div class="score-msg" id="score-msg"></div>
+    </div>
+    <div class="submit-pill" id="submit-pill"></div>
+    <h3 style="font-family:var(--display);font-size:18px;letter-spacing:0.08em;color:var(--white);margin-bottom:16px;padding-top:8px;text-transform:uppercase;" class="anim-up d2">Standard Breakdown</h3>
+    <div style="background:var(--dark-card);border:1px solid var(--border);border-radius:4px;padding:20px;" id="gap-report" class="anim-up d3"></div>
+    <div class="btn-row anim-up d4">
+      <button class="btn btn-outline" onclick="goTo('s-assess')">Review assessment</button>
+      <button class="btn btn-gold btn-arrow" onclick="goTo('s-transfer')">Field application</button>
+    </div>
+  </div>
+</div>
+
+<!-- S8 TRANSFER -->
+<div class="screen" id="s-transfer">
+  <div class="section">
+    <div class="eyebrow anim-up">Field application</div>
+    <h2 class="section-h anim-up d1">CARRY THIS<br><em>ON DUTY.</em></h2>
+    <p class="section-sub anim-up d2">Five principles. Apply them on every call from here forward.</p>
+    <div class="anim-up d3">
+      <div class="xfer-item"><div class="xfer-n">01</div><div class="xfer-text"><strong>Run the Graham factors before you act.</strong> Severity. Immediate threat. Active resistance. Those three questions take two seconds to answer and they are the foundation of every justification you will ever write.</div></div>
+      <div class="xfer-item"><div class="xfer-n">02</div><div class="xfer-text"><strong>De-escalate first when time and safety permit.</strong> It is not weakness. It is legally required, tactically sound, and it creates a documented record that protects you if force becomes necessary later.</div></div>
+      <div class="xfer-item"><div class="xfer-n">03</div><div class="xfer-text"><strong>Use force proportional to the threat — not the frustration.</strong> PA § 508 authorizes force necessary to effect a lawful arrest. The moment force exceeds what is necessary, it stops being lawful.</div></div>
+      <div class="xfer-item"><div class="xfer-n">04</div><div class="xfer-text"><strong>Report all force under Act 57 — when in doubt, report.</strong> The threshold is lower than most officers realize. Any physical force, including pointing a firearm, may trigger reporting requirements. Missing a report is a separate violation on top of anything else.</div></div>
+      <div class="xfer-item"><div class="xfer-n">05</div><div class="xfer-text"><strong>Intervene when you see excessive force.</strong> It is not optional, it is not a career decision, it is a legal obligation. Document what you did and when you did it.</div></div>
+    </div>
+    <div class="card-gold anim-up d4" style="margin-top:24px;">
+      <div class="spec-row"><span class="spec-key">NEXT MODULE</span><span class="spec-val">UOF-02 — Documentation and Report Writing</span></div>
+      <div class="spec-row"><span class="spec-key">REQUIRED FOR</span><span class="spec-val">Solo patrol clearance</span></div>
+      <div class="spec-row"><span class="spec-key">TIME</span><span class="spec-val">Approx. 20 minutes</span></div>
+    </div>
+    <div class="btn-row anim-up d4">
+      <button class="btn btn-gold btn-arrow" onclick="goTo('s-cert')">View training certificate</button>
+    </div>
+    <div class="ff-credit anim-up d5">
+      <span class="ff-label">LEARNING EXPERIENCE DESIGNED BY</span>
+      <a class="ff-brand" href="https://foundationforward.com" target="_blank" rel="noopener">
+        <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><rect width="20" height="20" rx="4" fill="#1D5FD4"/><rect x="3" y="5" width="14" height="3" rx="1.5" fill="#EEF4FF"/><rect x="3" y="10" width="10" height="3" rx="1.5" fill="#6B9EE8"/><rect x="3" y="15" width="12" height="3" rx="1.5" fill="#6B9EE8"/></svg>
+        <span class="ff-name">Foundation Forward</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- S9 CERTIFICATE -->
+<div class="screen" id="s-cert">
+  <div class="cert-screen">
+    <div class="cert-card anim-up" id="cert-card">
+      <div class="cert-header">
+        <svg width="44" height="44" viewBox="0 0 36 36" fill="none" aria-hidden="true">
+          <path d="M18 2L4 9V18C4 25.2 10.4 31.6 18 34C25.6 31.6 32 25.2 32 18V9L18 2Z" fill="#0A1628" stroke="#C9A84C" stroke-width="1.5"/>
+          <text x="18" y="22" text-anchor="middle" font-family="'Oswald',sans-serif" font-size="10" font-weight="700" fill="#C9A84C" letter-spacing="0.05em">KPD</text>
+        </svg>
+        <div>
+          <div class="cert-dept-name">Keystone Police Department</div>
+          <div class="cert-dept-sub">COMMONWEALTH OF PENNSYLVANIA // FIELD TRAINING PROGRAM</div>
+        </div>
+      </div>
+      <div class="cert-presents">Training Certificate</div>
+      <div class="cert-certifies">This certifies that</div>
+      <div class="cert-name" id="cert-name">—</div>
+      <div class="cert-module">Module UOF-01 — Use of Force</div>
+      <div class="cert-module-sub">Pennsylvania use of force law, Graham v. Connor objective reasonableness standard, PA Title 18 § 508, force continuum and de-escalation, Act 57 of 2020 reporting requirements, and duty to intervene.</div>
+      <div class="cert-stats">
+        <div class="cert-stat">
+          <div class="cert-stat-label">Score</div>
+          <div class="cert-stat-val" id="cert-score">—</div>
+        </div>
+        <div class="cert-stat">
+          <div class="cert-stat-label">Status</div>
+          <div class="cert-stat-val pass" id="cert-status">—</div>
+        </div>
+        <div class="cert-stat">
+          <div class="cert-stat-label">Completed</div>
+          <div class="cert-stat-val" id="cert-date" style="font-size:14px;padding-top:6px;">—</div>
+        </div>
+      </div>
+      <div class="cert-footer">
+        <div class="cert-id" id="cert-id">CERT ID: —</div>
+        <div class="cert-ff">
+          <div class="cert-ff-label">DESIGNED BY</div>
+          <div style="width:5px;"></div>
+          <svg width="14" height="14" viewBox="0 0 20 20"><rect width="20" height="20" rx="4" fill="#1D5FD4"/><rect x="3" y="5" width="14" height="3" rx="1.5" fill="#EEF4FF"/><rect x="3" y="10" width="10" height="3" rx="1.5" fill="#6B9EE8"/><rect x="3" y="15" width="12" height="3" rx="1.5" fill="#6B9EE8"/></svg>
+          <div class="cert-ff-name">Foundation Forward</div>
+        </div>
+      </div>
+    </div>
+    <div class="cert-actions anim-up d2">
+      <button class="btn btn-gold" onclick="window.print()">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><rect x="2" y="5" width="12" height="8" rx="1" stroke="currentColor" stroke-width="1.5"/><path d="M5 5V3a1 1 0 011-1h4a1 1 0 011 1v2" stroke="currentColor" stroke-width="1.5"/><rect x="5" y="9" width="6" height="1.5" rx="0.75" fill="currentColor"/></svg>
+        Print certificate
+      </button>
+      <button class="btn-print" onclick="goTo('s-transfer')">Back</button>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<script>
+/* ══ CONFIG ══ */
+const SHEET_URL = 'https://script.google.com/macros/s/AKfycbyvGMOyK3wqOA1eAcHxwOGRFmHQXGYLd2OFf0BwAOl7jCKINFU9wmz0MJOKKek8p7y2qw/exec';
+const GATE_SECS = 45;
+
+/* ══ STATE ══ */
+const moduleStart = Date.now();
+let learnerName = '';
+let pkAnswered = 0, pkAnswers = {};
+let assessAnswered = 0, assessScore = 0;
+const assessResults = {};
+const stdViewed = [false,false,false,false,false];
+const stdTimers = {};
+let currentTeach = 0;
+
+const screens = ['s-name','s-attention','s-objectives','s-prior','s-teach','s-example','s-assess','s-results','s-transfer','s-cert'];
+const pcts    = [0, 5, 15, 25, 40, 58, 72, 88, 95, 100];
+
+/* ══ TEACH DATA ══ */
+const teachSections = [
+  {
+    num: '01', chip: 'Federal Standard', title: 'GRAHAM V. CONNOR',
+    costIdx: 0,
+    body: `In 1989 the Supreme Court established that all police use of force claims are analyzed under the Fourth Amendment's objective reasonableness standard. The question is never whether the officer <em>felt</em> threatened — it is whether a <strong>reasonable officer</strong> in the same situation would have believed the force was necessary.<br><br>The Court identified three factors that bear on reasonableness. They apply together, not individually, and are assessed based on information available to the officer at the moment force was used — not in hindsight.`,
+    diagram: buildTeachDiagram01(),
+    callout: '<strong>The moment matters.</strong> Force is judged by what a reasonable officer knew and perceived at the time of the decision — not what investigators learn afterward. Document your perception of the threat as you experienced it.',
+    alert: null,
+    statute: `GRAHAM v. CONNOR, 490 U.S. 386 (1989)\n<span class="hi">FACTOR 1...... Severity of the crime at issue\nFACTOR 2...... Whether the suspect poses an immediate threat\nFACTOR 3...... Whether the suspect is actively resisting or evading</span>\n<span class="ref">Standard: Objective reasonableness — not subjective good faith</span>`
+  },
+  {
+    num: '02', chip: 'Pennsylvania Law', title: 'PA TITLE 18 § 508',
+    costIdx: 1,
+    body: `Pennsylvania law provides its own justification framework for police use of force. Under Title 18 Section 508, a law enforcement officer is justified in using force when making a lawful arrest and the officer believes the force is immediately necessary.<br><br>The statute draws a critical line between <strong>non-deadly force</strong> and <strong>deadly force</strong>. Non-deadly force can be used to effect a lawful arrest when there is resistance. Deadly force requires a specific belief that the subject creates a risk of death or serious bodily injury to the officer or others.`,
+    diagram: buildTeachDiagram02(),
+    callout: '<strong>Key distinction:</strong> Fleeing alone does not justify deadly force. Tennessee v. Garner (1985) established that an officer may not use deadly force to prevent escape unless the subject poses a significant threat of death or serious physical injury.',
+    alert: 'Unarmed does not mean force-free. A subject resisting arrest without a weapon can still justify non-deadly force. Force must be proportional — not zero.',
+    statute: `PA CRIMES CODE, TITLE 18 § 508 — USE OF FORCE IN LAW ENFORCEMENT\n<span class="hi">NON-DEADLY FORCE... Justified when immediately necessary to effect lawful arrest\nDEADLY FORCE....... Requires belief of risk of death or serious bodily injury\nFLEEING SUSPECT.... Deadly force not justified by flight alone</span>\n<span class="ref">See also: Tennessee v. Garner, 471 U.S. 1 (1985)</span>`
+  },
+  {
+    num: '03', chip: 'Force Continuum', title: 'DE-ESCALATION',
+    costIdx: 2,
+    body: `The force continuum is not a rigid ladder — it is a framework for matching the level of force to the level of threat. Keystone PD policy and Pennsylvania law both require officers to consider de-escalation before escalating force whenever time and safety permit.<br><br>De-escalation is both a legal requirement and a tactical advantage. It slows the situation, creates options, and generates a documented record of attempts to resolve without force.`,
+    diagram: buildTeachDiagram03(),
+    callout: '<strong>Documentation during de-escalation:</strong> Verbally note your attempts — "I told the subject three times to drop the weapon." Those statements become part of your report and establish your good faith effort before force was used.',
+    alert: null,
+    statute: `KEYSTONE PD GENERAL ORDER 4.1 — USE OF FORCE\n<span class="hi">LEVEL 1........ Officer presence and verbal commands\nLEVEL 2........ Soft empty-hand control\nLEVEL 3........ Hard empty-hand control\nLEVEL 4........ Intermediate weapons (OC, baton, Taser)\nLEVEL 5........ Deadly force</span>\n<span class="ref">De-escalation required at each level when time and safety permit</span>`
+  },
+  {
+    num: '04', chip: 'Act 57 of 2020', title: 'REPORTING REQUIREMENTS',
+    costIdx: 3,
+    body: `Pennsylvania Act 57 of 2020 created one of the most significant reforms to police accountability in the state's history. It established a statewide use of force reporting database maintained by the Pennsylvania State Police.<br><br>The reporting threshold is deliberately broad. <strong>Any use of physical force</strong> during an arrest or detention — including pointing a firearm — may trigger reporting requirements. Officers should operate under the assumption that if physical force occurred, it needs to be documented and reported.`,
+    diagram: buildTeachDiagram04(),
+    callout: null,
+    alert: 'Missing an Act 57 report is a separate policy violation — independent of whether the underlying use of force was justified. When in doubt: report, document, and notify your supervisor.',
+    statute: `PENNSYLVANIA ACT 57 OF 2020\n<span class="hi">TRIGGERS....... Any use of physical force during arrest or detention\nINCLUDES....... Pointing a firearm at a subject\nREPORTS TO..... Pennsylvania State Police reporting system\nTIMELINE....... Per department policy and PSP requirements</span>\n<span class="ref">Also established: use of force registry, duty to intervene, decertification procedures</span>`
+  },
+  {
+    num: '05', chip: 'Legal Obligation', title: 'DUTY TO INTERVENE',
+    costIdx: 4,
+    body: `Act 57 of 2020 codified the duty to intervene in Pennsylvania law. An officer who witnesses another officer using or about to use excessive force has a legal obligation to physically intervene — not to report later, not to warn once and wait, but to act.<br><br>This obligation extends to situations where you are not the primary officer on the scene. Bystander status is not a defense. If you were present and did not intervene when intervention was possible, you may bear liability for the excessive force.`,
+    diagram: buildTeachDiagram05(),
+    callout: '<strong>After intervening:</strong> Document what you witnessed, when you intervened, what action you took, and the outcome. Report through department channels immediately. Your documentation protects both the subject and you.',
+    alert: 'Failure to intervene when legally required is not a protected act. Officers have faced civil and criminal liability for standing by during excessive force incidents.',
+    statute: `PENNSYLVANIA ACT 57 OF 2020 — DUTY TO INTERVENE\n<span class="hi">OBLIGATION...... Physically intervene when witnessing excessive force\nAPPLIES TO...... All officers present, regardless of rank or assignment\nAFTER.......... Document and report through department channels\nLIABILITY...... Officers may bear liability for failure to intervene</span>\n<span class="ref">Civil liability under 42 U.S.C. § 1983 may extend to officers who fail to intervene</span>`
+  }
+];
+
+const costBoxes = [
+  { label: 'What failure here costs', headline: 'Federal civil rights litigation under § 1983', detail: 'A use of force that cannot be justified under the Graham standard exposes the officer and municipality to federal civil rights claims. Average settlement cost in Pennsylvania municipalities: $150,000 to $800,000. Beyond money — officer decertification under Act 57 and potential criminal charges.' },
+  { label: 'What failure here costs', headline: 'Criminal charges under PA law', detail: 'Force that exceeds what PA § 508 justifies is not protected. Officers have faced aggravated assault charges for force used beyond statutory authorization. The law does not protect officers who exceed the proportionality standard — it protects officers who stay within it.' },
+  { label: 'What failure here costs', headline: 'Preventable use-of-force incidents', detail: 'Departments that invest in de-escalation training see measurable reductions in use-of-force incidents. Every use of force that did not need to happen is a liability event, a trauma event, and a community trust event. De-escalation is not soft — it is strategically and financially sound.' },
+  { label: 'What failure here costs', headline: 'Decertification under Act 57', detail: 'Act 57 created a statewide decertification process for officers who fail to report. An unreported use of force that surfaces later is not just a policy violation — it is grounds for decertification, meaning loss of the ability to serve as a law enforcement officer in Pennsylvania.' },
+  { label: 'What failure here costs', headline: 'Personal civil liability for the witnessing officer', detail: 'Officers who fail to intervene in excessive force incidents have faced personal civil liability under 42 U.S.C. § 1983. "I did not want to get involved" is not a defense. The duty to intervene is a legal obligation, not a guideline.' }
+];
+
+/* ══ SVG DIAGRAMS ══ */
+function buildTeachDiagram01() {
+  return `<svg width="100%" viewBox="0 0 640 200" xmlns="http://www.w3.org/2000/svg">
+    <text x="320" y="18" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="10" fill="#5A6A7A" letter-spacing="3">GRAHAM v. CONNOR — THREE-FACTOR TEST</text>
+    <rect x="20" y="30" width="180" height="120" rx="3" fill="#1A2130" stroke="rgba(201,168,76,0.3)" stroke-width="1"/>
+    <text x="110" y="58" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="9" fill="#C9A84C" letter-spacing="2">FACTOR 01</text>
+    <text x="110" y="78" text-anchor="middle" font-family="'Oswald',sans-serif" font-size="14" fill="#EEF2F7" font-weight="600">CRIME</text>
+    <text x="110" y="94" text-anchor="middle" font-family="'Oswald',sans-serif" font-size="14" fill="#EEF2F7" font-weight="600">SEVERITY</text>
+    <text x="110" y="115" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="9" fill="#8A9AB0">Misdemeanor vs.</text>
+    <text x="110" y="128" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="9" fill="#8A9AB0">felony matters</text>
+    <rect x="230" y="30" width="180" height="120" rx="3" fill="#1A2130" stroke="rgba(192,57,43,0.4)" stroke-width="1.5"/>
+    <text x="320" y="58" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="9" fill="#E74C3C" letter-spacing="2">FACTOR 02</text>
+    <text x="320" y="78" text-anchor="middle" font-family="'Oswald',sans-serif" font-size="14" fill="#EEF2F7" font-weight="600">IMMEDIATE</text>
+    <text x="320" y="94" text-anchor="middle" font-family="'Oswald',sans-serif" font-size="14" fill="#EEF2F7" font-weight="600">THREAT</text>
+    <text x="320" y="115" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="9" fill="#8A9AB0">Most significant</text>
+    <text x="320" y="128" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="9" fill="#8A9AB0">of the three factors</text>
+    <rect x="440" y="30" width="180" height="120" rx="3" fill="#1A2130" stroke="rgba(201,168,76,0.3)" stroke-width="1"/>
+    <text x="530" y="58" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="9" fill="#C9A84C" letter-spacing="2">FACTOR 03</text>
+    <text x="530" y="78" text-anchor="middle" font-family="'Oswald',sans-serif" font-size="14" fill="#EEF2F7" font-weight="600">ACTIVE</text>
+    <text x="530" y="94" text-anchor="middle" font-family="'Oswald',sans-serif" font-size="14" fill="#EEF2F7" font-weight="600">RESISTANCE</text>
+    <text x="530" y="115" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="9" fill="#8A9AB0">Resisting arrest</text>
+    <text x="530" y="128" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="9" fill="#8A9AB0">or fleeing</text>
+    <text x="320" y="178" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="9" fill="#5A6A7A">ASSESSED TOGETHER — NOT INDIVIDUALLY — AT THE MOMENT FORCE IS USED</text>
+  </svg>`;
+}
+
+function buildTeachDiagram02() {
+  return `<svg width="100%" viewBox="0 0 640 200" xmlns="http://www.w3.org/2000/svg">
+    <text x="320" y="18" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="10" fill="#5A6A7A" letter-spacing="3">PA § 508 — FORCE AUTHORIZATION THRESHOLD</text>
+    <rect x="20" y="32" width="280" height="130" rx="3" fill="#0F1E12" stroke="rgba(39,174,96,0.35)" stroke-width="1.5"/>
+    <text x="160" y="58" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="9" fill="#2ECC71" letter-spacing="2">NON-DEADLY FORCE</text>
+    <text x="160" y="80" text-anchor="middle" font-family="'Oswald',sans-serif" font-size="13" fill="#EEF2F7" font-weight="600">Immediately necessary</text>
+    <text x="160" y="96" text-anchor="middle" font-family="'Oswald',sans-serif" font-size="13" fill="#EEF2F7" font-weight="600">to effect lawful arrest</text>
+    <text x="160" y="118" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="9" fill="#5A9A6A">Subject resisting, pulling away,</text>
+    <text x="160" y="130" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="9" fill="#5A9A6A">or refusing lawful commands</text>
+    <text x="160" y="152" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="10" fill="#2ECC71" font-weight="700">AUTHORIZED ✓</text>
+    <rect x="340" y="32" width="280" height="130" rx="3" fill="#1A0F0F" stroke="rgba(192,57,43,0.4)" stroke-width="1.5"/>
+    <text x="480" y="58" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="9" fill="#E74C3C" letter-spacing="2">DEADLY FORCE</text>
+    <text x="480" y="80" text-anchor="middle" font-family="'Oswald',sans-serif" font-size="13" fill="#EEF2F7" font-weight="600">Requires belief of risk</text>
+    <text x="480" y="96" text-anchor="middle" font-family="'Oswald',sans-serif" font-size="13" fill="#EEF2F7" font-weight="600">of death or SBI</text>
+    <text x="480" y="118" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="9" fill="#9A5A5A">Flight alone does NOT</text>
+    <text x="480" y="130" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="9" fill="#9A5A5A">justify deadly force</text>
+    <text x="480" y="152" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="10" fill="#E74C3C" font-weight="700">HIGHER THRESHOLD ⚠</text>
+  </svg>`;
+}
+
+function buildTeachDiagram03() {
+  return `<svg width="100%" viewBox="0 0 640 200" xmlns="http://www.w3.org/2000/svg">
+    <text x="320" y="18" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="10" fill="#5A6A7A" letter-spacing="3">FORCE CONTINUUM — RESPONSE TO RESISTANCE</text>
+    <rect x="20" y="32" width="100" height="130" rx="3" fill="#0F1820" stroke="rgba(39,174,96,0.3)" stroke-width="1"/>
+    <text x="70" y="88" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="8" fill="#2ECC71">PRESENCE</text>
+    <text x="70" y="100" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="8" fill="#2ECC71">+ VERBAL</text>
+    <text x="70" y="148" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="8" fill="#5A6A7A">LEVEL 1</text>
+    <rect x="130" y="52" width="100" height="110" rx="3" fill="#0F1820" stroke="rgba(201,168,76,0.2)" stroke-width="1"/>
+    <text x="180" y="100" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="8" fill="#C9A84C">SOFT</text>
+    <text x="180" y="112" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="8" fill="#C9A84C">CONTROL</text>
+    <text x="180" y="148" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="8" fill="#5A6A7A">LEVEL 2</text>
+    <rect x="240" y="70" width="100" height="92" rx="3" fill="#0F1820" stroke="rgba(201,168,76,0.25)" stroke-width="1"/>
+    <text x="290" y="112" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="8" fill="#C9A84C">HARD</text>
+    <text x="290" y="124" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="8" fill="#C9A84C">CONTROL</text>
+    <text x="290" y="148" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="8" fill="#5A6A7A">LEVEL 3</text>
+    <rect x="350" y="88" width="100" height="74" rx="3" fill="#1A1408" stroke="rgba(201,168,76,0.35)" stroke-width="1"/>
+    <text x="400" y="120" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="8" fill="#E8C66A">INTERMEDIATE</text>
+    <text x="400" y="132" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="8" fill="#E8C66A">WEAPONS</text>
+    <text x="400" y="148" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="8" fill="#5A6A7A">LEVEL 4</text>
+    <rect x="460" y="105" width="100" height="57" rx="3" fill="#1A0808" stroke="rgba(192,57,43,0.5)" stroke-width="1.5"/>
+    <text x="510" y="130" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="8" fill="#E74C3C">DEADLY</text>
+    <text x="510" y="142" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="8" fill="#E74C3C">FORCE</text>
+    <text x="510" y="162" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="8" fill="#5A6A7A">LEVEL 5</text>
+    <text x="320" y="185" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="9" fill="#5A6A7A">NOT A LADDER — SKIP LEVELS WHEN THREAT LEVEL JUSTIFIES IT</text>
+  </svg>`;
+}
+
+function buildTeachDiagram04() {
+  return `<svg width="100%" viewBox="0 0 640 185" xmlns="http://www.w3.org/2000/svg">
+    <text x="320" y="18" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="10" fill="#5A6A7A" letter-spacing="3">ACT 57 — REPORTING TRIGGER THRESHOLD</text>
+    <rect x="20" y="32" width="180" height="110" rx="3" fill="#0F1820" stroke="rgba(39,174,96,0.25)" stroke-width="1"/>
+    <text x="110" y="58" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="9" fill="#2ECC71">NO REPORT REQUIRED</text>
+    <text x="110" y="82" text-anchor="middle" font-family="'Oswald',sans-serif" font-size="13" fill="#EEF2F7">Verbal commands only</text>
+    <text x="110" y="98" text-anchor="middle" font-family="'Oswald',sans-serif" font-size="13" fill="#EEF2F7">No physical contact</text>
+    <text x="110" y="115" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="8" fill="#5A7A6A">No force used or threatened</text>
+    <rect x="230" y="32" width="180" height="110" rx="3" fill="#1A1408" stroke="rgba(201,168,76,0.4)" stroke-width="1.5"/>
+    <text x="320" y="58" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="9" fill="#C9A84C">REPORT REQUIRED</text>
+    <text x="320" y="82" text-anchor="middle" font-family="'Oswald',sans-serif" font-size="13" fill="#EEF2F7">Pointed firearm</text>
+    <text x="320" y="98" text-anchor="middle" font-family="'Oswald',sans-serif" font-size="13" fill="#EEF2F7">Any physical force</text>
+    <text x="320" y="115" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="8" fill="#9A8A5A">Regardless of injury outcome</text>
+    <rect x="440" y="32" width="180" height="110" rx="3" fill="#1A0808" stroke="rgba(192,57,43,0.5)" stroke-width="1.5"/>
+    <text x="530" y="58" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="9" fill="#E74C3C">CRITICAL REPORT</text>
+    <text x="530" y="82" text-anchor="middle" font-family="'Oswald',sans-serif" font-size="13" fill="#EEF2F7">Serious bodily injury</text>
+    <text x="530" y="98" text-anchor="middle" font-family="'Oswald',sans-serif" font-size="13" fill="#EEF2F7">Death</text>
+    <text x="530" y="115" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="8" fill="#9A5A5A">Multiple agency notifications</text>
+    <text x="320" y="170" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="9" fill="#5A6A7A">RULE: IF UNCERTAIN WHETHER TO REPORT — REPORT</text>
+  </svg>`;
+}
+
+function buildTeachDiagram05() {
+  return `<svg width="100%" viewBox="0 0 640 180" xmlns="http://www.w3.org/2000/svg">
+    <text x="320" y="18" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="10" fill="#5A6A7A" letter-spacing="3">DUTY TO INTERVENE — DECISION FRAMEWORK</text>
+    <rect x="240" y="34" width="160" height="50" rx="3" fill="#1A2130" stroke="rgba(201,168,76,0.3)" stroke-width="1"/>
+    <text x="320" y="55" text-anchor="middle" font-family="'Oswald',sans-serif" font-size="13" fill="#EEF2F7" font-weight="600">YOU WITNESS</text>
+    <text x="320" y="71" text-anchor="middle" font-family="'Oswald',sans-serif" font-size="13" fill="#EEF2F7" font-weight="600">USE OF FORCE</text>
+    <line x1="320" y1="84" x2="320" y2="104" stroke="#C9A84C" stroke-width="1.5"/>
+    <rect x="200" y="104" width="240" height="40" rx="3" fill="#1A1408" stroke="rgba(201,168,76,0.4)" stroke-width="1"/>
+    <text x="320" y="119" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="9" fill="#C9A84C">IS IT OBJECTIVELY EXCESSIVE?</text>
+    <text x="320" y="135" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="9" fill="#8A9AB0">Apply Graham standard</text>
+    <line x1="220" y1="144" x2="100" y2="144" stroke="#2ECC71" stroke-width="1.5"/>
+    <line x1="100" y1="144" x2="100" y2="158" stroke="#2ECC71" stroke-width="1.5"/>
+    <rect x="30" y="158" width="140" height="18" rx="3" fill="rgba(39,174,96,0.12)" stroke="rgba(39,174,96,0.3)" stroke-width="1"/>
+    <text x="100" y="171" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="9" fill="#2ECC71">NO → CONTINUE</text>
+    <line x1="420" y1="144" x2="540" y2="144" stroke="#E74C3C" stroke-width="1.5"/>
+    <line x1="540" y1="144" x2="540" y2="158" stroke="#E74C3C" stroke-width="1.5"/>
+    <rect x="470" y="158" width="140" height="18" rx="3" fill="rgba(192,57,43,0.15)" stroke="rgba(192,57,43,0.4)" stroke-width="1.5"/>
+    <text x="540" y="171" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="9" fill="#E74C3C">YES → INTERVENE NOW</text>
+  </svg>`;
+}
+
+/* ══ RENDER TEACH SECTIONS ══ */
+function renderTeach() {
+  const container = document.getElementById('teach-page');
+  container.innerHTML = '';
+  teachSections.forEach((s, i) => {
+    const cost = costBoxes[s.costIdx];
+    const div = document.createElement('div');
+    div.className = 'teach-panel';
+    div.id = `teach-${i}`;
+    div.style.display = i === 0 ? 'flex' : 'none';
+    div.style.flexDirection = 'column';
+    div.style.flex = '1';
+
+    div.innerHTML = `
+      <div class="teach-header anim-up">
+        <div class="teach-num-big">${s.num}</div>
+        <div class="teach-header-text">
+          <div class="teach-chip">${s.chip}</div>
+          <div class="teach-title">${s.title}</div>
+        </div>
+      </div>
+
+      <div style="margin:14px 28px 4px;background:linear-gradient(135deg,#140E00,#1C1500);border:1px solid rgba(201,168,76,0.35);border-radius:4px;padding:16px 18px;display:flex;align-items:flex-start;gap:14px;" class="anim-up d1">
+        <div style="font-family:'Oswald',sans-serif;font-size:28px;color:var(--gold);line-height:1;flex-shrink:0;">⚠</div>
+        <div>
+          <div style="font-family:var(--mono);font-size:9px;color:var(--gold);letter-spacing:.12em;text-transform:uppercase;margin-bottom:5px;">${cost.label}</div>
+          <div style="font-size:14px;font-weight:600;color:var(--white);margin-bottom:4px;line-height:1.4;">${cost.headline}</div>
+          <div style="font-size:13px;color:var(--white-dim);line-height:1.65;">${cost.detail}</div>
+        </div>
+      </div>
+
+      <div class="diagram-wrap anim-up d2">${s.diagram}<div class="diagram-cap">FIG ${s.num} — ${s.chip.toUpperCase()}</div></div>
+
+      <div class="cb anim-up d3"><p class="body-text">${s.body}</p></div>
+      ${s.callout ? `<div class="cb anim-up d4"><div class="callout">${s.callout}</div></div>` : ''}
+      ${s.alert ? `<div class="cb anim-up d4"><div class="alert">${s.alert}</div></div>` : ''}
+      <div class="cb anim-up d4"><div class="statute">${s.statute}</div></div>
+
+      <div class="gate-wrap" id="gate-${i}" style="${stdViewed[i]?'display:none':''}">
+        <div class="gate-bar"><div class="gate-fill" id="gf-${i}" style="transition:width ${GATE_SECS}s linear;"></div></div>
+        <div class="gate-label" id="gl-${i}">Required reading time — continue button unlocks shortly</div>
+      </div>
+
+      <div style="padding:0 28px 28px;">
+        <div class="btn-row">
+          ${i > 0 ? `<button class="btn btn-outline" onclick="showTeach(${i-1})">Previous</button>` : ''}
+          ${i < teachSections.length - 1
+            ? `<button class="btn btn-gold btn-arrow" id="nt-${i}" onclick="showTeach(${i+1})" ${stdViewed[i]?'':'disabled'}>Next standard</button>`
+            : `<button class="btn btn-gold btn-arrow" id="nt-${i}" onclick="goTo('s-example')" ${stdViewed[i]?'':'disabled'}>Worked scenario</button>`
+          }
+        </div>
+      </div>
+    `;
+    container.appendChild(div);
+    if (!stdViewed[i]) startGate(i);
+  });
+}
+
+function startGate(idx) {
+  if (stdTimers[idx]) return;
+  stdTimers[idx] = true;
+  setTimeout(() => { requestAnimationFrame(() => { const f=document.getElementById(`gf-${idx}`); if(f)f.style.width='0%'; }); }, 100);
+  setTimeout(() => { unlockTeach(idx); }, GATE_SECS * 1000);
+}
+
+function unlockTeach(idx) {
+  stdViewed[idx] = true;
+  const g = document.getElementById(`gate-${idx}`); if(g) g.style.display='none';
+  const b = document.getElementById(`nt-${idx}`); if(b) b.disabled = false;
+}
+
+function showTeach(idx) {
+  teachSections.forEach((_, i) => {
+    const p = document.getElementById(`teach-${i}`); if(p) p.style.display = i===idx?'flex':'none';
+    const pip = document.getElementById(`pip-${i}`);
+    if(pip) { pip.classList.remove('active','done'); if(i===idx) pip.classList.add('active'); else if(i<idx||stdViewed[i]) pip.classList.add('done'); }
+  });
+  currentTeach = idx;
+  window.scrollTo({ top:0, behavior:'smooth' });
+  if (!stdTimers[idx] && !stdViewed[idx]) startGate(idx);
+}
+
+/* ══ NAVIGATION ══ */
+function goTo(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo({ top:0, behavior:'smooth' });
+  const idx = screens.indexOf(id);
+  const pct = pcts[idx] || 0;
+  document.getElementById('prog-fill').style.width = pct + '%';
+  document.getElementById('prog-region').setAttribute('aria-valuenow', pct);
+  if (id === 's-results') buildResults();
+  if (id === 's-teach')   { renderTeach(); showTeach(0); }
+  if (id === 's-cert')    buildCert();
+}
+
+/* ══ NAME ══ */
+document.getElementById('lname').addEventListener('input', function() {
+  document.getElementById('start-btn').disabled = this.value.trim().length < 2;
+});
+document.getElementById('lname').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter' && this.value.trim().length >= 2) startModule();
+});
+function startModule() {
+  learnerName = document.getElementById('lname').value.trim();
+  goTo('s-attention');
+}
+
+/* ══ PRIOR KNOWLEDGE ══ */
+const pkData = {
+  pk1: { correct: 1, fb: ['Tennessee v. Garner addressed deadly force against fleeing suspects specifically. Graham v. Connor (1989) established the broader objective reasonableness standard.','Correct. Graham v. Connor (1989) established that all excessive force claims are analyzed under the Fourth Amendment objective reasonableness standard.','Terry v. Ohio addressed reasonable suspicion for stops. Graham v. Connor (1989) is the use of force standard.'] },
+  pk2: { correct: 1, fb: ['Act 57 reporting goes to the Pennsylvania State Police statewide database, not just the department supervisor.','Correct. Act 57 of 2020 requires reporting to the Pennsylvania State Police via the required reporting system.','Act 57 reporting is triggered by any use of physical force — not only incidents resulting in hospitalization.'] },
+  pk3: { correct: 2, fb: ['Reporting after the fact is insufficient. The duty to intervene requires immediate physical action, not post-incident documentation.','The duty to intervene does not require supervisor consultation first. When excessive force is occurring, the obligation is to intervene immediately.','Correct. The duty to intervene under Act 57 requires physical intervention when an officer witnesses another using or about to use excessive force.'] }
+};
+
+function pkA(btn, qId, isCorrect, idx) {
+  const q = document.getElementById(qId);
+  if (q.dataset.done) return;
+  q.dataset.done = 'true';
+  const data = pkData[qId];
+  const btns = q.querySelectorAll('.pk-opt');
+  btns.forEach((b, i) => { b.disabled = true; if(i===data.correct) b.classList.add('reveal'); });
+  btn.classList.add(isCorrect ? 'right' : 'wrong');
+  const fb = document.getElementById(qId+'-fb');
+  fb.textContent = data.fb[idx];
+  fb.classList.add('show', isCorrect ? 'ok' : 'bad');
+  pkAnswers[qId] = btns[idx].textContent.trim();
+  pkAnswered++;
+  if (pkAnswered >= 3) document.getElementById('pk-next').disabled = false;
+}
+
+/* ══ ASSESSMENT ══ */
+const assessData = [
+  { correct: 2, standard: 'Graham v. Connor Three-Factor Test' },
+  { correct: 1, standard: 'PA Title 18 § 508 — Force Authorization' },
+  { correct: 0, standard: 'De-escalation and Force Continuum' },
+  { correct: 2, standard: 'Act 57 Reporting Requirements' },
+  { correct: 1, standard: 'Duty to Intervene' }
+];
+
+function assess(btn, choice) {
+  const card = btn.closest('.assess-card');
+  if (card.dataset.done) return;
+  card.dataset.done = 'true';
+  const idx = Array.from(document.querySelectorAll('.assess-card')).indexOf(card);
+  const data = assessData[idx];
+  const isCorrect = choice === data.correct;
+  card.querySelectorAll('.assess-choice').forEach((b, i) => {
+    b.disabled = true;
+    if (i === data.correct) b.classList.add('reveal');
+  });
+  btn.className = 'assess-choice ' + (isCorrect ? 'sel-right' : 'sel-wrong');
+  card.classList.add(isCorrect ? 'correct' : 'incorrect');
+  const fb = document.getElementById('a' + idx + '-' + (isCorrect ? 'right' : 'wrong'));
+  fb.classList.add('show', isCorrect ? 'ok' : 'bad');
+  if (isCorrect) assessScore++;
+  assessResults[idx] = { standard: data.standard, correct: isCorrect };
+  assessAnswered++;
+  if (assessAnswered >= 5) document.getElementById('results-btn').disabled = false;
+}
+
+/* ══ RESULTS ══ */
+function buildResults() {
+  document.getElementById('score-display').innerHTML = `<em>${assessScore}</em>/5`;
+  const msgs = [
+    'Additional study required before patrol clearance. Review all five standards with your FTO.',
+    'One standard solid. Four require further study before you are cleared for solo patrol.',
+    'Progressing. Three standards need reinforcement. Schedule a review session with your FTO.',
+    'Solid foundation. Two gaps to close. Review the flagged standards before your next shift.',
+    'Strong. One gap to address before solo patrol clearance.',
+    'Training complete. You have demonstrated knowledge of the Keystone PD use of force standards.'
+  ];
+  document.getElementById('score-msg').textContent = msgs[assessScore] || msgs[5];
+  let html = '';
+  for (let i = 0; i < 5; i++) {
+    const r = assessResults[i];
+    if (!r) continue;
+    html += `<div class="gap-item"><div class="gap-icon ${r.correct?'ok':'miss'}">${r.correct?'✓':'✕'}</div><div class="gap-text"><strong>${r.standard}</strong> — ${r.correct ? 'Answered correctly.' : 'Answered incorrectly. Review this standard with your FTO.'}</div></div>`;
+  }
+  document.getElementById('gap-report').innerHTML = html;
+  submitToSheet();
+}
+
+/* ══ CERTIFICATE ══ */
+function buildCert() {
+  const now = new Date();
+  const dateStr = now.toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' });
+  const certId = 'KPD-UOF01-' + now.getFullYear() + String(now.getMonth()+1).padStart(2,'0') + String(now.getDate()).padStart(2,'0') + '-' + Math.random().toString(36).substr(2,6).toUpperCase();
+  const passed = assessScore >= 4;
+  document.getElementById('cert-name').textContent = learnerName || 'Recruit Name';
+  document.getElementById('cert-score').textContent = assessScore + '/5';
+  document.getElementById('cert-status').textContent = passed ? 'CLEARED' : 'NEEDS REVIEW';
+  document.getElementById('cert-status').style.color = passed ? '#1A6B3A' : '#9B2417';
+  document.getElementById('cert-date').textContent = dateStr;
+  document.getElementById('cert-id').textContent = 'CERT ID: ' + certId;
+}
+
+/* ══ GOOGLE SHEETS ══ */
+function submitToSheet() {
+  const pill = document.getElementById('submit-pill');
+  pill.classList.add('show','sending');
+  pill.textContent = 'RECORDING TO TRAINING FILE...';
+  const missed = Object.values(assessResults).filter(r=>!r.correct).map(r=>r.standard).join(', ') || 'None';
+  const mins = Math.max(1, Math.round((Date.now()-moduleStart)/60000));
+  const payload = {
+    name: learnerName || 'Unknown',
+    score: assessScore + '/5',
+    passed: assessScore >= 4,
+    standardsMissed: missed,
+    timeSpent: mins + ' min',
+    priorKnowledge: Object.entries(pkAnswers).map(([q,a])=>q.toUpperCase()+': '+a).join(' | ') || 'Not recorded',
+    module: 'UOF-01 — Use of Force / Keystone PD',
+    timestamp: new Date().toISOString()
+  };
+  fetch(SHEET_URL, { method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload) })
+  .then(() => { pill.classList.remove('sending'); pill.classList.add('sent'); pill.textContent = 'RECORDED TO TRAINING FILE'; })
+  .catch(() => { pill.classList.remove('sending'); pill.classList.add('error'); pill.textContent = 'RECORDING FAILED — NOTIFY FTO'; });
+}
+</script>
+</body>
+</html>
