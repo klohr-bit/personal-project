@@ -1,0 +1,440 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Uncial+Antiqua&family=MedievalSharp&family=IM+Fell+English:ital@0;1&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+.app{background:#070a0f;min-height:620px;border-radius:14px;overflow:hidden;position:relative;color:#c8b89a;font-family:'IM Fell English',Georgia,serif}
+.screen{display:none;position:relative;z-index:2;animation:rise .45s ease}
+.screen.on{display:block}
+@keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.scanlines{position:absolute;inset:0;pointer-events:none;z-index:1;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,.18) 3px,rgba(0,0,0,.18) 4px)}
+.vignette{position:absolute;inset:0;pointer-events:none;z-index:1;background:radial-gradient(ellipse at center,transparent 55%,#000 100%)}
+
+.home-wrap{padding:28px 20px 32px}
+.rune-title{font-family:'Uncial Antiqua',serif;font-size:28px;color:#c8622a;text-align:center;letter-spacing:3px;margin-bottom:4px;text-shadow:0 0 30px rgba(200,80,20,.6)}
+.rune-sub{text-align:center;font-style:italic;color:#6b5a40;font-size:15px;margin-bottom:26px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.dcard{background:#0d1117;border:1px solid #1e2530;border-radius:8px;cursor:pointer;overflow:hidden;transition:border-color .2s,transform .2s;position:relative}
+.dcard:hover{border-color:#c8622a;transform:translateY(-3px)}
+.dcard:hover .card-glow{opacity:1}
+.card-glow{position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .3s}
+.card-svg-wrap{height:130px;display:flex;align-items:center;justify-content:center;overflow:hidden;background:#060810}
+.card-svg-wrap svg{width:100%;height:100%}
+.card-info{padding:10px 10px 12px}
+.card-name{font-family:'Uncial Antiqua',serif;font-size:12px;color:#c8a060;letter-spacing:.5px;margin-bottom:2px}
+.card-class{font-size:11px;color:#4a3d28;font-style:italic}
+
+.prof-wrap{padding:24px 22px 28px}
+.back{background:none;border:1px solid #1e2530;color:#6b5a40;padding:7px 14px;border-radius:6px;cursor:pointer;font-family:'IM Fell English',serif;font-size:13px;margin-bottom:20px;transition:all .2s}
+.back:hover{border-color:#c8622a;color:#c8a060}
+.prof-hero{display:flex;gap:20px;margin-bottom:20px;align-items:flex-start}
+.prof-art{width:220px;flex-shrink:0;height:180px;background:#060810;border-radius:8px;border:1px solid #1e2530;overflow:hidden}
+.prof-art svg{width:100%;height:100%}
+.prof-meta{flex:1}
+.prof-name{font-family:'Uncial Antiqua',serif;font-size:20px;color:#c8622a;margin-bottom:2px;line-height:1.2}
+.prof-rider{font-size:13px;color:#6b5a40;font-style:italic;margin-bottom:14px}
+.stat-row{margin-bottom:7px}
+.stat-label{font-size:11px;color:#4a3d28;margin-bottom:3px;letter-spacing:.5px;font-family:'Uncial Antiqua',serif}
+.stat-track{height:5px;background:#0d1117;border-radius:2px;border:1px solid #1e2530;overflow:hidden}
+.stat-fill{height:100%;border-radius:2px;transition:width 1s ease}
+.section-head{font-family:'Uncial Antiqua',serif;font-size:11px;color:#4a3d28;letter-spacing:2px;margin-bottom:10px;border-bottom:1px solid #1a1f28;padding-bottom:6px}
+.ability{display:flex;gap:10px;margin-bottom:10px;align-items:flex-start}
+.aicon{width:28px;height:28px;border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.aicon svg{width:16px;height:16px}
+.atext{font-size:13px;line-height:1.5;color:#9a8870}
+.atext strong{color:#c8a060;font-style:normal}
+.weakness{background:#0d0810;border:1px solid #2a1218;border-radius:6px;padding:10px 14px;font-size:13px;color:#7a4040;font-style:italic;margin-bottom:18px}
+.battle-btn{width:100%;background:#0d0a00;border:1px solid #6a3010;color:#c8622a;padding:13px;border-radius:7px;cursor:pointer;font-family:'Uncial Antiqua',serif;font-size:14px;letter-spacing:1px;transition:all .2s}
+.battle-btn:hover{background:#180e00;border-color:#c8622a;box-shadow:0 0 20px rgba(200,80,20,.2)}
+
+.sc-wrap{padding:24px 22px 28px}
+.scenario-box{background:#060810;border:1px solid #1a2030;border-radius:8px;padding:20px;margin-bottom:18px;font-size:16px;line-height:1.8;color:#8a9ab8;font-style:italic;text-align:center;position:relative}
+.scenario-box::before{content:'';position:absolute;inset:0;border-radius:8px;pointer-events:none}
+.rune-line{text-align:center;font-family:'Uncial Antiqua',serif;font-size:11px;letter-spacing:3px;color:#2a2010;margin-bottom:12px}
+.outcome-box{background:#060c08;border:1px solid #1a2818;border-radius:8px;padding:18px;margin-bottom:20px}
+.outcome-head{font-family:'Uncial Antiqua',serif;font-size:11px;color:#3a5a28;letter-spacing:2px;margin-bottom:10px}
+.outcome-text{font-size:15px;line-height:1.7;color:#7a9870}
+.stars-row{display:flex;gap:4px;justify-content:center;margin-bottom:16px}
+.star{width:18px;height:18px}
+.btn-row{display:flex;gap:10px}
+.btn2{flex:1;background:#060810;border:1px solid #1e2530;color:#6b5a40;padding:11px;border-radius:7px;cursor:pointer;font-family:'IM Fell English',serif;font-size:14px;transition:all .2s;text-align:center}
+.btn2:hover{border-color:#c8622a;color:#c8a060}
+</style>
+
+<div class="app">
+<div class="scanlines"></div>
+<div class="vignette"></div>
+
+<div class="screen on" id="s-home">
+<div class="home-wrap">
+<div class="rune-title">DRAGON RIDERS</div>
+<div class="rune-sub">Choose your dragon, Viking. Choose wisely.</div>
+<div class="grid" id="card-grid"></div>
+</div>
+</div>
+
+<div class="screen" id="s-prof">
+<div class="prof-wrap">
+<button class="back" onclick="show('s-home')">&#8592; All Dragons</button>
+<div class="prof-hero">
+<div class="prof-art" id="prof-art"></div>
+<div class="prof-meta">
+<div class="prof-name" id="prof-name"></div>
+<div class="prof-rider" id="prof-rider"></div>
+<div id="prof-stats"></div>
+</div>
+</div>
+<div class="section-head">SPECIAL ABILITIES</div>
+<div id="prof-abilities"></div>
+<div class="weakness" id="prof-weakness"></div>
+<button class="battle-btn" onclick="goScenario()">&#9760; Send Into Battle &#9760;</button>
+</div>
+</div>
+
+<div class="screen" id="s-sc">
+<div class="sc-wrap">
+<button class="back" onclick="show('s-prof')">&#8592; Back</button>
+<div class="scenario-box" id="sc-text"></div>
+<div class="rune-line" id="rune-line">&#10022; &#10022; &#10022;</div>
+<div class="stars-row" id="stars-row"></div>
+<div class="outcome-box">
+<div class="outcome-head">WHAT HAPPENED</div>
+<div class="outcome-text" id="outcome-text"></div>
+</div>
+<div class="btn-row">
+<button class="btn2" onclick="goScenario()">&#8635; New Adventure</button>
+<button class="btn2" onclick="show('s-home')">&#8962; Home</button>
+</div>
+</div>
+</div>
+</div>
+
+<script>
+const SVG = {
+toothless:`<svg viewBox="0 0 220 180" xmlns="http://www.w3.org/2000/svg">
+<rect width="220" height="180" fill="#060810"/>
+<circle cx="110" cy="60" r="45" fill="#0a0c14" stroke="#1a1f2e" stroke-width="1"/>
+<path d="M75 55 Q90 30 110 28 Q130 30 145 55 Q150 75 140 90 Q130 105 110 108 Q90 105 80 90 Q70 75 75 55Z" fill="#111520"/>
+<path d="M88 50 Q100 36 110 34 Q120 36 132 50" fill="none" stroke="#1e2535" stroke-width="1.5"/>
+<path d="M75 55 Q60 35 55 20 Q62 28 70 32 Q65 40 75 55Z" fill="#0d1020"/>
+<path d="M145 55 Q160 35 165 20 Q158 28 150 32 Q155 40 145 55Z" fill="#0d1020"/>
+<path d="M55 20 Q50 5 48 0 Q56 8 60 18Z" fill="#0a0d18"/>
+<path d="M165 20 Q170 5 172 0 Q164 8 160 18Z" fill="#0a0d18"/>
+<ellipse cx="96" cy="68" rx="8" ry="9" fill="#0d1020"/>
+<ellipse cx="124" cy="68" rx="8" ry="9" fill="#0d1020"/>
+<ellipse cx="96" cy="68" rx="4" ry="5" fill="#4ef" opacity=".9"/>
+<ellipse cx="124" cy="68" rx="4" ry="5" fill="#4ef" opacity=".9"/>
+<ellipse cx="97" cy="67" rx="1.5" ry="2" fill="#8ff"/>
+<ellipse cx="125" cy="67" rx="1.5" ry="2" fill="#8ff"/>
+<path d="M97 82 Q110 86 123 82" fill="none" stroke="#1e2535" stroke-width="1"/>
+<path d="M104 88 L106 92 M110 89 L110 93 M116 88 L114 92" stroke="#2a3040" stroke-width="1"/>
+<path d="M110 108 Q90 120 70 140 Q85 125 95 130 Q100 118 110 115 Q120 118 125 130 Q135 125 150 140 Q130 120 110 108Z" fill="#0d1020"/>
+<path d="M70 140 Q50 155 40 170 Q55 158 70 162 Q80 150 90 148" fill="#0a0c18" stroke="#151a28" stroke-width=".5"/>
+<path d="M150 140 Q170 155 180 170 Q165 158 150 162 Q140 150 130 148" fill="#0a0c18" stroke="#151a28" stroke-width=".5"/>
+<path d="M90 148 Q100 155 110 158 Q120 155 130 148 Q120 160 110 162 Q100 160 90 148Z" fill="#0d1222"/>
+<circle cx="96" cy="68" r="5.5" fill="none" stroke="#1ef" stroke-width=".5" opacity=".5"/>
+<circle cx="124" cy="68" r="5.5" fill="none" stroke="#1ef" stroke-width=".5" opacity=".5"/>
+<ellipse cx="110" cy="165" rx="30" ry="6" fill="#050709" opacity=".8"/>
+</svg>`,
+
+nadder:`<svg viewBox="0 0 220 180" xmlns="http://www.w3.org/2000/svg">
+<rect width="220" height="180" fill="#060810"/>
+<path d="M110 20 Q125 15 135 25 Q148 35 145 55 Q142 70 130 78 Q118 85 108 82 Q95 78 88 65 Q82 50 88 38 Q97 24 110 20Z" fill="#0e1828"/>
+<path d="M110 18 L115 5 L118 18Z" fill="#0a1220" stroke="#1a2535" stroke-width=".5"/>
+<path d="M120 22 L128 8 L130 22Z" fill="#0a1220" stroke="#1a2535" stroke-width=".5"/>
+<path d="M128 28 L138 16 L138 28Z" fill="#0a1220" stroke="#1a2535" stroke-width=".5"/>
+<ellipse cx="104" cy="50" rx="7" ry="8" fill="#0a1020"/>
+<ellipse cx="128" cy="48" rx="7" ry="8" fill="#0a1020"/>
+<ellipse cx="104" cy="50" rx="3.5" ry="4.5" fill="#e8a020" opacity=".85"/>
+<ellipse cx="128" cy="48" rx="3.5" ry="4.5" fill="#e8a020" opacity=".85"/>
+<ellipse cx="104.8" cy="49" rx="1.2" ry="1.8" fill="#fff8e0"/>
+<ellipse cx="128.8" cy="47" rx="1.2" ry="1.8" fill="#fff8e0"/>
+<path d="M108 78 Q90 95 75 115" fill="none" stroke="#0e1828" stroke-width="8" stroke-linecap="round"/>
+<path d="M108 78 Q90 95 75 115" fill="none" stroke="#1a2838" stroke-width="4" stroke-linecap="round"/>
+<path d="M75 115 Q60 135 55 155 Q62 138 70 130 Q78 140 80 152 Q85 138 78 128" fill="#0d1828"/>
+<path d="M108 78 Q130 88 155 75 Q175 65 185 50" fill="none" stroke="#0e1828" stroke-width="16" stroke-linecap="round"/>
+<path d="M108 78 Q130 88 155 75 Q175 65 185 50" fill="none" stroke="#111e30" stroke-width="10" stroke-linecap="round"/>
+<path d="M185 50 L195 42 L188 55Z" fill="#0e1828"/>
+<path d="M182 56 L192 50 L185 62Z" fill="#0e1828"/>
+<path d="M108 82 Q100 95 98 110 Q96 125 100 140" fill="none" stroke="#0a1020" stroke-width="5"/>
+<path d="M100 140 Q98 155 102 168 L106 160 L104 168 L110 158 L108 168 L114 158 L112 168 L118 158 L116 168 L120 158 L118 165" fill="none" stroke="#1a2838" stroke-width="1.5"/>
+<path d="M88 60 Q82 68 85 78" fill="none" stroke="#1a2838" stroke-width="1"/>
+<path d="M138 56 Q144 62 142 72" fill="none" stroke="#1a2838" stroke-width="1"/>
+<ellipse cx="100" cy="165" rx="25" ry="5" fill="#040608" opacity=".7"/>
+</svg>`,
+
+zippleback:`<svg viewBox="0 0 220 180" xmlns="http://www.w3.org/2000/svg">
+<rect width="220" height="180" fill="#060810"/>
+<path d="M60 130 Q55 110 60 90 Q68 70 80 75 Q90 80 88 100 Q86 118 80 130Z" fill="#0a1a0e" stroke="#142018" stroke-width="1"/>
+<path d="M160 130 Q165 110 160 90 Q152 70 140 75 Q130 80 132 100 Q134 118 140 130Z" fill="#0a1a0e" stroke="#142018" stroke-width="1"/>
+<path d="M80 130 Q90 140 110 142 Q130 140 140 130 Q130 148 110 150 Q90 148 80 130Z" fill="#0c1810"/>
+<path d="M60 90 Q55 70 62 52 Q68 38 78 34 Q86 32 90 42 Q92 52 88 65 Q84 75 80 75Z" fill="#0d1e12"/>
+<path d="M160 90 Q165 70 158 52 Q152 38 142 34 Q134 32 130 42 Q128 52 132 65 Q136 75 140 75Z" fill="#0d1e12"/>
+<path d="M78 34 L68 18 L72 32Z" fill="#0a1810"/>
+<path d="M82 30 L76 12 L82 28Z" fill="#0a1810"/>
+<path d="M86 32 L84 14 L88 30Z" fill="#0a1810"/>
+<path d="M142 34 L152 18 L148 32Z" fill="#0a1810"/>
+<path d="M138 30 L144 12 L138 28Z" fill="#0a1810"/>
+<path d="M134 32 L136 14 L132 30Z" fill="#0a1810"/>
+<ellipse cx="72" cy="58" rx="7" ry="8" fill="#080f0a"/>
+<ellipse cx="88" cy="56" rx="7" ry="8" fill="#080f0a"/>
+<ellipse cx="72" cy="58" rx="3.5" ry="4.5" fill="#20e840" opacity=".8"/>
+<ellipse cx="88" cy="56" rx="3.5" ry="4.5" fill="#20e840" opacity=".8"/>
+<ellipse cx="72.8" cy="57" rx="1.2" ry="1.8" fill="#c0ffc0"/>
+<ellipse cx="88.8" cy="55" rx="1.2" ry="1.8" fill="#c0ffc0"/>
+<ellipse cx="132" cy="58" rx="7" ry="8" fill="#080f0a"/>
+<ellipse cx="148" cy="56" rx="7" ry="8" fill="#080f0a"/>
+<ellipse cx="132" cy="58" rx="3.5" ry="4.5" fill="#20e840" opacity=".8"/>
+<ellipse cx="148" cy="56" rx="3.5" ry="4.5" fill="#20e840" opacity=".8"/>
+<ellipse cx="132.8" cy="57" rx="1.2" ry="1.8" fill="#c0ffc0"/>
+<ellipse cx="148.8" cy="55" rx="1.2" ry="1.8" fill="#c0ffc0"/>
+<path d="M80 70 Q68 72 62 68" fill="none" stroke="#142018" stroke-width="1.2"/>
+<path d="M140 70 Q152 72 158 68" fill="none" stroke="#142018" stroke-width="1.2"/>
+<path d="M75 68 L70 74 L68 70 L64 76" stroke="#20a030" stroke-width=".8" fill="none" opacity=".5"/>
+<path d="M145 68 L148 75" stroke="#20a030" stroke-width=".8" fill="none" opacity=".5"/>
+<path d="M80 130 Q70 145 60 160 Q65 148 72 146 Q76 155 76 165 Q82 152 78 142" fill="#0a1810"/>
+<path d="M140 130 Q150 145 160 160 Q155 148 148 146 Q144 155 144 165 Q138 152 142 142" fill="#0a1810"/>
+<path d="M35 100 Q20 90 15 75 Q25 82 35 80 Q42 88 40 100Z" fill="#0a1810" stroke="#142018" stroke-width=".5"/>
+<path d="M185 100 Q200 90 205 75 Q195 82 185 80 Q178 88 180 100Z" fill="#0a1810" stroke="#142018" stroke-width=".5"/>
+<ellipse cx="110" cy="168" rx="40" ry="6" fill="#040608" opacity=".6"/>
+</svg>`,
+
+scauldron:`<svg viewBox="0 0 220 180" xmlns="http://www.w3.org/2000/svg">
+<rect width="220" height="180" fill="#060810"/>
+<path d="M110 25 Q130 20 148 32 Q165 45 165 68 Q165 92 148 105 Q132 116 110 116 Q88 116 72 105 Q55 92 55 68 Q55 45 72 32 Q90 20 110 25Z" fill="#081420"/>
+<path d="M110 20 Q125 10 138 18 Q148 12 155 25 Q148 20 138 24 Q125 16 110 20Z" fill="#06101a"/>
+<path d="M68 75 Q55 82 45 78 Q38 72 42 65 Q48 58 58 62 Q62 65 68 75Z" fill="#081420" stroke="#0e2030" stroke-width="1"/>
+<path d="M65 68 Q52 62 44 68 Q48 62 58 62Z" fill="#0a1828"/>
+<path d="M68 75 Q60 82 52 80" fill="none" stroke="#0e2030" stroke-width="1"/>
+<path d="M152 75 Q165 82 175 78 Q182 72 178 65 Q172 58 162 62 Q158 65 152 75Z" fill="#081420" stroke="#0e2030" stroke-width="1"/>
+<ellipse cx="92" cy="65" rx="9" ry="10" fill="#060e18"/>
+<ellipse cx="128" cy="65" rx="9" ry="10" fill="#060e18"/>
+<ellipse cx="92" cy="65" rx="4.5" ry="5.5" fill="#20c8e0" opacity=".8"/>
+<ellipse cx="128" cy="65" rx="4.5" ry="5.5" fill="#20c8e0" opacity=".8"/>
+<ellipse cx="93" cy="64" rx="1.5" ry="2" fill="#b0f0ff"/>
+<ellipse cx="129" cy="64" rx="1.5" ry="2" fill="#b0f0ff"/>
+<path d="M88 95 Q110 105 132 95" fill="none" stroke="#0e2030" stroke-width="1.5"/>
+<path d="M95 100 Q110 112 125 100" fill="#06101a" stroke="#0e2030" stroke-width=".8"/>
+<path d="M110 116 Q95 128 85 145 Q80 158 85 168" fill="none" stroke="#081420" stroke-width="8" stroke-linecap="round"/>
+<path d="M110 116 Q125 128 135 145 Q140 158 135 168" fill="none" stroke="#081420" stroke-width="8" stroke-linecap="round"/>
+<path d="M85 168 Q90 175 95 172 Q100 178 105 172 Q110 178 115 172 Q120 178 125 172 Q130 175 135 168" fill="none" stroke="#0e2030" stroke-width="2"/>
+<path d="M110 116 Q115 140 110 165" fill="none" stroke="#0a1c2c" stroke-width="18" stroke-linecap="round"/>
+<path d="M88 105 Q75 118 70 135 Q78 122 88 125 Q90 112 92 108" fill="#081420"/>
+<path d="M132 105 Q145 118 150 135 Q142 122 132 125 Q130 112 128 108" fill="#081420"/>
+<path d="M70 50 Q62 40 68 32 Q75 40 72 48Z" fill="#081420"/>
+<path d="M150 50 Q158 40 152 32 Q145 40 148 48Z" fill="#081420"/>
+<path d="M72 38 Q65 30 70 24" fill="none" stroke="#20a8c0" stroke-width="1" opacity=".6"/>
+<path d="M148 38 Q155 30 150 24" fill="none" stroke="#20a8c0" stroke-width="1" opacity=".6"/>
+<ellipse cx="110" cy="170" rx="35" ry="6" fill="#040608" opacity=".7"/>
+</svg>`,
+
+nightmare:`<svg viewBox="0 0 220 180" xmlns="http://www.w3.org/2000/svg">
+<rect width="220" height="180" fill="#060810"/>
+<path d="M95 130 Q85 115 80 95 Q75 75 82 58 Q90 42 105 38 Q120 35 132 48 Q143 62 142 82 Q140 100 130 115 Q120 128 108 132Z" fill="#180808"/>
+<path d="M82 58 Q72 42 65 28 Q70 35 74 44 Q72 50 80 60Z" fill="#120606"/>
+<path d="M65 28 Q58 16 55 8 Q62 14 66 22Z" fill="#0e0404"/>
+<path d="M55 8 L52 0 L58 6Z" fill="#0a0202"/>
+<path d="M80 60 Q70 50 62 42 Q68 48 73 55Z" fill="#120606"/>
+<path d="M142 62 Q155 48 162 35 Q157 44 153 53 Q155 58 148 66Z" fill="#120606"/>
+<path d="M162 35 Q170 22 172 14 Q166 20 162 28Z" fill="#0e0404"/>
+<path d="M172 14 L175 6 L170 10Z" fill="#0a0202"/>
+<path d="M148 66 Q158 55 168 48 Q162 54 156 61Z" fill="#120606"/>
+<ellipse cx="100" cy="70" rx="9" ry="10" fill="#0e0404"/>
+<ellipse cx="125" cy="68" rx="9" ry="10" fill="#0e0404"/>
+<ellipse cx="100" cy="70" rx="4.5" ry="5.5" fill="#e84010" opacity=".9"/>
+<ellipse cx="125" cy="68" rx="4.5" ry="5.5" fill="#e84010" opacity=".9"/>
+<ellipse cx="101" cy="69" rx="1.5" ry="2" fill="#ffc080"/>
+<ellipse cx="126" cy="67" rx="1.5" ry="2" fill="#ffc080"/>
+<path d="M95 88 Q112 96 130 88" fill="none" stroke="#2a0808" stroke-width="1.5"/>
+<path d="M102 93 L105 99 M112 94 L112 100 M122 93 L119 99" stroke="#3a1010" stroke-width="1.2"/>
+<path d="M108 132 Q85 142 68 160" fill="none" stroke="#180808" stroke-width="10" stroke-linecap="round"/>
+<path d="M108 132 Q131 142 148 158" fill="none" stroke="#180808" stroke-width="10" stroke-linecap="round"/>
+<path d="M68 160 Q52 170 45 178 Q55 168 65 168 Q70 175 72 178 Q76 170 72 162" fill="#120606"/>
+<path d="M148 158 Q164 170 171 178 Q161 168 151 168 Q146 175 144 178 Q140 170 144 162" fill="#120606"/>
+<path d="M108 132 Q118 148 112 168" fill="none" stroke="#140606" stroke-width="16" stroke-linecap="round"/>
+<path d="M78 58 Q65 65 60 80 Q70 72 80 75Z" fill="#120606" stroke="#1e0808" stroke-width=".5"/>
+<path d="M142 60 Q155 68 160 82 Q150 74 140 77Z" fill="#120606" stroke="#1e0808" stroke-width=".5"/>
+<circle cx="88" cy="50" r="2" fill="#ff6020" opacity=".6"/>
+<circle cx="130" cy="48" r="2" fill="#ff6020" opacity=".6"/>
+<circle cx="85" cy="44" r="1.5" fill="#ff8030" opacity=".5"/>
+<ellipse cx="108" cy="172" rx="30" ry="5" fill="#040404" opacity=".7"/>
+</svg>`,
+
+gronckle:`<svg viewBox="0 0 220 180" xmlns="http://www.w3.org/2000/svg">
+<rect width="220" height="180" fill="#060810"/>
+<ellipse cx="110" cy="90" rx="62" ry="52" fill="#0f1208"/>
+<ellipse cx="110" cy="85" rx="50" ry="42" fill="#121508"/>
+<path d="M80 55 Q95 35 110 32 Q125 35 140 55 Q148 70 145 88 Q140 105 125 112 Q118 116 110 116 Q102 116 95 112 Q80 105 75 88 Q72 70 80 55Z" fill="#141808"/>
+<path d="M80 55 Q65 45 55 50 Q48 58 52 70 Q58 65 65 68 Q70 60 80 55Z" fill="#101408"/>
+<path d="M140 55 Q155 45 165 50 Q172 58 168 70 Q162 65 155 68 Q150 60 140 55Z" fill="#101408"/>
+<ellipse cx="55" cy="70" rx="12" ry="8" fill="#0e1206" stroke="#1a1e08" stroke-width=".5"/>
+<ellipse cx="165" cy="70" rx="12" ry="8" fill="#0e1206" stroke="#1a1e08" stroke-width=".5"/>
+<ellipse cx="95" cy="72" rx="10" ry="11" fill="#0a0e06"/>
+<ellipse cx="125" cy="72" rx="10" ry="11" fill="#0a0e06"/>
+<ellipse cx="95" cy="72" rx="5" ry="6" fill="#c8a020" opacity=".85"/>
+<ellipse cx="125" cy="72" rx="5" ry="6" fill="#c8a020" opacity=".85"/>
+<ellipse cx="96" cy="71" rx="1.8" ry="2.2" fill="#fff0a0"/>
+<ellipse cx="126" cy="71" rx="1.8" ry="2.2" fill="#fff0a0"/>
+<path d="M95 94 Q110 102 125 94" fill="none" stroke="#1c2008" stroke-width="1.5"/>
+<path d="M100 98 L104 106 M110 100 L110 108 M120 98 L116 106" stroke="#242808" stroke-width="1.5"/>
+<path d="M86 50 L82 36 L86 38 L84 24 L90 30 L88 18" fill="none" stroke="#1a1e08" stroke-width="2" stroke-linecap="round"/>
+<path d="M134 50 L138 36 L134 38 L136 24 L130 30 L132 18" fill="none" stroke="#1a1e08" stroke-width="2" stroke-linecap="round"/>
+<path d="M106 46 L106 32 L110 36 L114 32 L114 46" fill="none" stroke="#1a1e08" stroke-width="2" stroke-linecap="round"/>
+<path d="M78 115 Q60 125 45 140 Q38 152 42 162 Q50 148 62 148 Q68 158 68 168 Q76 152 70 140 Q75 130 82 124" fill="#101408"/>
+<path d="M142 115 Q160 125 175 140 Q182 152 178 162 Q170 148 158 148 Q152 158 152 168 Q144 152 150 140 Q145 130 138 124" fill="#101408"/>
+<path d="M96 112 Q96 130 90 148 Q98 134 110 134 Q122 134 130 148 Q124 130 124 112" fill="#121608"/>
+<circle cx="80" cy="65" r="3" fill="#1a1e08"/>
+<circle cx="140" cy="65" r="3" fill="#1a1e08"/>
+<circle cx="72" cy="72" r="2.5" fill="#1a1e08"/>
+<circle cx="148" cy="72" r="2.5" fill="#1a1e08"/>
+<ellipse cx="110" cy="168" rx="42" ry="7" fill="#040508" opacity=".7"/>
+</svg>`
+};
+
+const glows = {
+toothless:'rgba(30,220,255,0.15)',
+nadder:'rgba(230,160,20,0.15)',
+zippleback:'rgba(30,220,60,0.15)',
+scauldron:'rgba(20,180,220,0.15)',
+nightmare:'rgba(220,50,10,0.18)',
+gronckle:'rgba(180,150,20,0.12)'
+};
+
+const dragons = [
+{id:'toothless',name:'Night Fury',rider:'Toothless — ridden by Hiccup',class:'Strike Class',
+stats:{Speed:10,Fire:9,Strength:8,Stealth:10},statColors:['#2090d0','#d06020','#c8a020','#206040'],
+abilities:[
+{label:'Plasma blasts',desc:'Fires explosive bolts of pure plasma — capable of sinking ships in a single shot',col:'#1a3a5a'},
+{label:'Supersonic flight',desc:'Faster than any dragon alive. Fishlegs calculated he can break the speed of sound',col:'#1a3a5a'},
+{label:'Echolocation',desc:'Navigates pitch-black caves using sound waves, like a bat — no light needed',col:'#1a3a5a'},
+{label:'Alpha command',desc:'As Dragon Alpha, his roar compels every dragon alive to obey. All of them.',col:'#0e2840'},
+],
+weakness:'Cannot fly without both tail fins. He needs Hiccup to steer — without him, Toothless is grounded.',
+scenarios:[
+{scene:'A titan-class Whispering Death has burrowed beneath Berk and the whole island is cracking apart.',outcomes:['Toothless locks onto the vibration with echolocation and dives into the tunnel. One plasma blast, perfectly placed. The tremors stop. Berk stands.',`Hiccup commands the Alpha roar. Deep underground, the Whispering Death freezes — then retreats. No dragon defies the Alpha.`]},
+{scene:'Drago\'s armada — fifty warships — has surrounded Berk under cover of night.',outcomes:[`Invisible against the black sky, Toothless threads between the masts and fires. Ship after ship ignites. By dawn, nothing remains but smoking timber.`,`Toothless unleashes the Alpha roar across the water. Every dragon on every ship turns on its captor at once. The armada tears itself apart.`]},
+]},
+{id:'nadder',name:'Deadly Nadder',rider:'Stormfly — ridden by Astrid',class:'Tracker Class',
+stats:{Speed:8,Fire:9,Strength:7,Tracking:9},statColors:['#c09020','#e08020','#c8a020','#d07030'],
+abilities:[
+{label:'Magnesium fire',desc:'The hottest flame of any dragon — reduces stone and iron to slag within seconds',col:'#3a2800'},
+{label:'Spine volley',desc:'Launches a hail of razor spines from her tail. Each one can pin a Viking to a wall.',col:'#3a2800'},
+{label:'Scent tracking',desc:'Can follow a trail days old across open ocean. She has never lost a target.',col:'#3a2800'},
+{label:'Chicken boost',desc:'A secret — feeding her chicken triggers a hidden burst of raw speed. Temporarily, she rivals Toothless.',col:'#2a1800'},
+],
+weakness:`A blind spot directly in front of her beak. Step there and she cannot see you at all.`,
+scenarios:[
+{scene:`A dragon hunter fleet has caged twenty wild dragons and is sailing for the slave markets.`,outcomes:[`Stormfly dives at full chicken-fuelled speed, threading the cage rigging. Her spines shear the locks open simultaneously. The dragons pour free and turn on the hunters.`,`Astrid signals spine shot. The volley punches through the ship's hull below the waterline from two hundred feet. The fleet takes on water before the hunters even spot her.`]},
+{scene:`A Flightmare has paralysed the village — no one can move. It circles, preparing to feed.`,outcomes:[`Stormfly fires magnesium flame directly into the Flightmare's algae feeding stream. Without its food source, it cannot maintain its paralysing mist. It flees into the dark.`,`Astrid reads the pattern. Stormfly positions in the blind spot of the Flightmare — silent, unseen — and drives it into open water with a volley of spines.`]},
+]},
+{id:'zippleback',name:'Hideous Zippleback',rider:'Barf & Belch — ridden by Ruffnut & Tuffnut',class:'Mystery Class',
+stats:{Blast:8,Stealth:7,Strength:7,Chaos:10},statColors:['#208030','#305820','#c8a020','#18a030'],
+abilities:[
+{label:'Gas cloud',desc:'Barf exhales dense explosive gas. One breath can fill an entire valley with invisible fuel.',col:'#0e2a14'},
+{label:'Spark ignition',desc:'Belch produces the spark. Gas plus spark equals an explosion that levels walls.',col:'#0e2a14'},
+{label:'Two minds',desc:'Two heads, two sets of eyes. Nothing approaches unseen from any direction.',col:'#0e2a14'},
+{label:'Smoke screen',desc:'Their gas cloud is thick enough to hide an entire longship fleet from archers on the cliffs.',col:'#082014'},
+],
+weakness:`The heads disagree — constantly. In a crisis they sometimes fly in opposite directions at the worst possible moment.`,
+scenarios:[
+{scene:`A fortress of Dragon Hunters blocks the only mountain pass. Walls twelve feet thick, full garrison.`,outcomes:[`Barf floods the fortress with gas through the arrow slits. The garrison can't see their hands in front of their faces. Belch sparks from outside. The whole structure shudders. The gates fall open.`,`The twins argue about tactics for ten minutes, then accidentally discover that their gas, seeping under the drawbridge, is more effective than any ram. The explosion removes the drawbridge entirely. They take full credit.`]},
+{scene:`A sea stack of dangerous Screaming Deaths threatens every dragon route over the archipelago.`,outcomes:[`At altitude, Barf releases a colossal cloud. It sinks and wraps the sea stack. Belch's spark from above sends a shockwave through the nest. The Screaming Deaths scatter to distant islands, never to return.`,`Ruffnut and Tuffnut deliberately crash-land Barf and Belch on the sea stack. The chaos that follows — both heads doing different things — somehow drives every Screaming Death off the rock in confusion.`]},
+]},
+{id:'scauldron',name:'Scauldron',rider:'Scauldy — Tidal Class ocean terror',class:'Tidal Class',
+stats:{WaterBlast:9,Venom:8,Strength:9,Speed:6},statColors:['#1880a0','#0860c0','#8080c0','#2060a0'],
+abilities:[
+{label:'Boiling water blast',desc:'Swallows seawater, boils it in its cauldron stomach, and fires scalding jets. One hit strips the scales off a Screaming Death.',col:'#081828'},
+{label:'Lethal venom',desc:'Its venom kills a human in 24 hours. Paradoxically — it is also the only cure for Blue Oleander poisoning.',col:'#081828'},
+{label:'Ocean mastery',desc:'In water, nothing can match it. Its flexible tail can whip a longship in half.',col:'#081828'},
+{label:'Sentimental nature',desc:'Loves the smell of the sea. Sing to it, smell like fish — and it becomes the most loyal creature alive.',col:'#051220'},
+],
+weakness:`Must stay near water. On dry land its skin tightens, its strength fades, and its water stores drain away. Without water, it has no weapon.`,
+scenarios:[
+{scene:`The Blue Oleander has spread from a trader's cargo and poisoned every dragon on Berk. They are dying.`,outcomes:[`Hiccup rows alone toward the Scauldron — no weapons, no dragons. He smells of fish and seaweed. The Scauldron circles once. Then bites Mildew's leg (who was somehow also there). Enough venom for every dragon. By morning they recover.`,`The Scauldron surfaces, studies Hiccup, then turns toward Berk. One careful bite per dragon — the antidote delivered directly. It disappears back into the deep before anyone can thank it.`]},
+{scene:`Grimmel's warships are hunting the dragon migration through the open ocean at night.`,outcomes:[`The Scauldron rises beneath the lead ship and scalds the hull apart from below. In the dark, the other ships cannot tell what hit them. They turn and run, and never stop running.`,`The Scauldron herds the fleet with boiling water barrages — left, right, forward — steering them into a reef. The migration passes safely overhead while the hunters scrape barnacles off their wrecked hulls.`]},
+]},
+{id:'nightmare',name:'Monstrous Nightmare',rider:'Hookfang — ridden by Snotlout',class:'Stoker Class',
+stats:{Fire:10,Strength:9,Speed:7,Fear:10},statColors:['#c03010','#a02808','#c8a020','#e05010'],
+abilities:[
+{label:'Full body ignition',desc:'Sets his entire body ablaze — scales, wings, tail. A living fireball. Most creatures flee on sight.',col:'#2a0808'},
+{label:'Kerosene flame',desc:'His fire spreads like liquid and clings to surfaces long after he stops breathing. Stone, iron, water — it burns on all of them.',col:'#2a0808'},
+{label:'Titanfall strength',desc:'Can carry two armoured Vikings in flight without strain. In battle, he can throw a rival dragon.',col:'#2a0808'},
+{label:'Sheer intimidation',desc:'When he lights up, even dragons three times his size reconsider their choices.',col:'#1a0404'},
+],
+weakness:`Hot-headed, stubborn, and deeply uninterested in instructions he disagrees with. He makes his own decisions. This is sometimes catastrophic.`,
+scenarios:[
+{scene:`A Screaming Death has claimed a volcanic island where Berk shelters its dragon eggs.`,outcomes:[`Hookfang ignites fully and charges. Two dragons of pure fire, head to head. But Hookfang's flame clings where the Screaming Death's just washes off. The Screaming Death retreats, singed and stunned.`,`Snotlout aims for the Screaming Death's weak underbelly. Hookfang — ignoring the plan entirely — flies headfirst into the volcano instead, which somehow triggers a lava surge that drives the Screaming Death off the island. Snotlout claims he planned it.`]},
+{scene:`Dragon Root has maddened every dragon on Berk. They're turning on the Vikings.`,outcomes:[`Hookfang, immune to nothing, is also infected. But his rage is so enormous it circles back around. He lights himself on fire, which scares himself, which snaps him out of it. He then scares the other dragons into stillness, one by one.`,`Snotlout, in a rare moment of genuine courage, charges on foot into the chaos. Hookfang follows — not because he was commanded, but because he has decided Snotlout is his Viking. Together they corner every maddened dragon until the root burns out of their systems.`]},
+]},
+{id:'gronckle',name:'Gronckle',rider:'Meatlug — ridden by Fishlegs',class:'Boulder Class',
+stats:{Strength:10,Armour:10,Fire:7,Speed:4},statColors:['#806010','#a07810','#c8a020','#505010'],
+abilities:[
+{label:'Rock eating',desc:'Eats boulders, gravel, and compressed stone, then melts them in her stomach into ammunition.',col:'#1a1800'},
+{label:'Lava blasts',desc:'Spits blobs of molten rock that stick and burn through almost anything. Stone, ships, armour — nothing holds.',col:'#1a1800'},
+{label:'Gronckle Iron',desc:'Fed the right combination of rocks, she can produce the strongest metal known — lighter and tougher than anything a blacksmith can forge.',col:'#1a1800'},
+{label:'Indestructible hide',desc:'Her scales have been compared to castle walls. Arrows bounce. Catapult stones bounce. She barely notices.',col:'#101000'},
+],
+weakness:`Desperately slow. The easiest dragon to outrun — unless she has already begun charging. Then nothing stops her.`,
+scenarios:[
+{scene:`The great forge of Berk has collapsed. Winter is coming and there are no weapons, no tools, no nails left to repair the village.`,outcomes:[`Fishlegs consults his notes. He feeds Meatlug a precise combination of stones — basalt, limestone, iron ore in the right ratios. She produces Gronckle Iron by the bucketful. Berk is re-armed before the first frost.`,`Meatlug eats through the collapsed forge wall — twelve feet of stone, in under a minute. Then smelts everything in sight with lava blasts. By morning the forge is rebuilt and already producing.`]},
+{scene:`A Whispering Death has burrowed a maze of tunnels under Berk's great hall. The ground is giving way.`,outcomes:[`Meatlug descends into the tunnels and eats the compromised stone, filling the passages behind her with her own armoured weight. The tunnels collapse harmlessly inward. The great hall stands.`,`Fishlegs, clinging to Meatlug's back underground, directs her through every chamber. She eats the Whispering Death's burrow, fills it with lava blasts, and the network solidifies into bedrock. Better than before.`]},
+]},
+];
+
+let cur = null;
+
+function show(id){
+document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));
+document.getElementById(id).classList.add('on');
+}
+
+function buildGrid(){
+const g = document.getElementById('card-grid');
+g.innerHTML = dragons.map(d=>`
+<div class="dcard" onclick="selectDragon('${d.id}')">
+<div class="card-glow" style="background:radial-gradient(ellipse at 50% 30%,${glows[d.id]},transparent 70%)"></div>
+<div class="card-svg-wrap">${SVG[d.id]}</div>
+<div class="card-info">
+<div class="card-name">${d.name}</div>
+<div class="card-class">${d.class}</div>
+</div>
+</div>`).join('');
+}
+
+function selectDragon(id){
+cur = dragons.find(d=>d.id===id);
+document.getElementById('prof-art').innerHTML = SVG[id];
+document.getElementById('prof-art').style.borderColor = glows[id].replace('0.15','0.5').replace('0.18','0.5').replace('0.12','0.4');
+document.getElementById('prof-name').textContent = cur.name;
+document.getElementById('prof-rider').textContent = cur.rider;
+const sk = Object.keys(cur.stats);
+document.getElementById('prof-stats').innerHTML = sk.map((k,i)=>`
+<div class="stat-row">
+<div class="stat-label">${k}</div>
+<div class="stat-track"><div class="stat-fill" style="width:${cur.stats[k]*10}%;background:${cur.statColors[i]}"></div></div>
+</div>`).join('');
+document.getElementById('prof-abilities').innerHTML = cur.abilities.map(a=>`
+<div class="ability">
+<div class="aicon" style="background:${a.col}">
+<svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><polygon points="8,1 10,6 15,6 11,10 13,15 8,12 3,15 5,10 1,6 6,6" fill="#c8a060" opacity=".7"/></svg>
+</div>
+<div class="atext"><strong>${a.label}:</strong> ${a.desc}</div>
+</div>`).join('');
+document.getElementById('prof-weakness').textContent = 'Weakness — ' + cur.weakness;
+show('s-prof');
+}
+
+function goScenario(){
+const sc = cur.scenarios[Math.floor(Math.random()*cur.scenarios.length)];
+const out = sc.outcomes[Math.floor(Math.random()*sc.outcomes.length)];
+const stars = Math.floor(Math.random()*2)+4;
+document.getElementById('sc-text').textContent = sc.scene;
+const runeChars = ['ᚠ','ᚢ','ᚦ','ᚨ','ᚱ','ᚲ','ᚷ','ᚹ','ᚺ','ᚾ','ᛁ','ᛃ','ᛇ','ᛈ','ᛉ','ᛊ','ᛏ','ᛒ','ᛖ','ᛗ','ᛚ','ᛜ','ᛞ','ᛟ'];
+document.getElementById('rune-line').textContent = Array.from({length:7},()=>runeChars[Math.floor(Math.random()*runeChars.length)]).join(' ');
+const starSVG = n => `<svg class="star" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><polygon points="9,1 11,6.5 17,6.5 12,10.5 14,16 9,12.5 4,16 6,10.5 1,6.5 7,6.5" fill="${n?'#c8820a':'#1a1a1a'}" stroke="${n?'#a06008':'#2a2a2a'}" stroke-width=".5"/></svg>`;
+document.getElementById('stars-row').innerHTML = Array.from({length:5},(_,i)=>starSVG(i<stars)).join('');
+document.getElementById('outcome-text').textContent = out;
+show('s-sc');
+}
+
+buildGrid();
+</script>
