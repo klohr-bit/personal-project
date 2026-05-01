@@ -1,0 +1,570 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=MedievalSharp&family=Cinzel:wght@400;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body { background: transparent; }
+
+  .app {
+    min-height: 600px;
+    background: linear-gradient(160deg, #1a0f00 0%, #2d1800 40%, #1a0a00 100%);
+    border-radius: 16px;
+    overflow: hidden;
+    position: relative;
+    font-family: 'Crimson Text', Georgia, serif;
+    color: #f5e6c8;
+  }
+
+  .stars {
+    position: absolute; inset: 0; pointer-events: none; overflow: hidden;
+    background-image: radial-gradient(circle, #fff8e7 1px, transparent 1px), radial-gradient(circle, #fff8e7 1px, transparent 1px);
+    background-size: 80px 80px, 130px 130px;
+    background-position: 0 0, 40px 40px;
+    opacity: 0.08;
+  }
+
+  .screen { display: none; padding: 28px 24px 32px; position: relative; z-index: 1; animation: fadeIn 0.4s ease; }
+  .screen.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+  h1 {
+    font-family: 'Cinzel', serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: #f0c060;
+    text-align: center;
+    text-shadow: 0 0 20px rgba(240,160,30,0.5);
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+
+  .subtitle {
+    text-align: center;
+    font-size: 17px;
+    color: #d4a96a;
+    font-style: italic;
+    margin-bottom: 28px;
+  }
+
+  .dragon-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 14px;
+  }
+
+  .dragon-card {
+    background: linear-gradient(145deg, rgba(80,40,0,0.7), rgba(40,20,0,0.9));
+    border: 1px solid rgba(240,160,30,0.35);
+    border-radius: 12px;
+    padding: 16px 12px 18px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .dragon-card::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(circle at 50% 0%, rgba(240,160,30,0.12), transparent 70%);
+    pointer-events: none;
+  }
+
+  .dragon-card:hover {
+    border-color: rgba(240,160,30,0.8);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(240,100,0,0.25);
+  }
+
+  .dragon-emoji {
+    font-size: 46px;
+    margin-bottom: 8px;
+    display: block;
+    filter: drop-shadow(0 2px 6px rgba(0,0,0,0.5));
+  }
+
+  .dragon-name {
+    font-family: 'Cinzel', serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: #f0c060;
+    letter-spacing: 0.5px;
+    margin-bottom: 5px;
+  }
+
+  .dragon-class {
+    font-size: 12px;
+    color: #a07840;
+    font-style: italic;
+    margin-bottom: 8px;
+  }
+
+  .dragon-tagline {
+    font-size: 13px;
+    color: #c8a870;
+    line-height: 1.4;
+  }
+
+  .divider {
+    border: none;
+    border-top: 1px solid rgba(240,160,30,0.2);
+    margin: 20px 0;
+  }
+
+  .back-btn {
+    background: rgba(80,40,0,0.6);
+    border: 1px solid rgba(240,160,30,0.4);
+    color: #d4a96a;
+    padding: 8px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Crimson Text', serif;
+    font-size: 15px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s;
+    margin-bottom: 20px;
+  }
+  .back-btn:hover { background: rgba(120,60,0,0.7); border-color: rgba(240,160,30,0.7); }
+
+  .home-btn {
+    background: transparent;
+    border: 1px solid rgba(240,160,30,0.3);
+    color: #a07840;
+    padding: 6px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: 'Crimson Text', serif;
+    font-size: 14px;
+    transition: all 0.2s;
+    margin-bottom: 14px;
+  }
+  .home-btn:hover { border-color: rgba(240,160,30,0.7); color: #d4a96a; }
+
+  .dragon-hero {
+    text-align: center;
+    margin-bottom: 22px;
+  }
+
+  .dragon-hero-emoji {
+    font-size: 80px;
+    display: block;
+    margin-bottom: 8px;
+    animation: float 3s ease-in-out infinite;
+    filter: drop-shadow(0 4px 12px rgba(240,100,0,0.4));
+  }
+  @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+
+  .dragon-title {
+    font-family: 'Cinzel', serif;
+    font-size: 22px;
+    color: #f0c060;
+    text-shadow: 0 0 16px rgba(240,160,30,0.5);
+    margin-bottom: 4px;
+  }
+
+  .dragon-subtitle {
+    font-style: italic;
+    color: #a07840;
+    font-size: 15px;
+  }
+
+  .abilities-box {
+    background: rgba(40,20,0,0.6);
+    border: 1px solid rgba(240,160,30,0.25);
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin-bottom: 18px;
+  }
+
+  .abilities-title {
+    font-family: 'Cinzel', serif;
+    font-size: 13px;
+    color: #f0c060;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+  }
+
+  .ability-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 9px;
+    font-size: 15px;
+    line-height: 1.4;
+  }
+  .ability-row:last-child { margin-bottom: 0; }
+
+  .ability-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+
+  .ability-text { color: #d4b080; }
+  .ability-text strong { color: #f0c060; font-weight: 600; }
+
+  .weakness-box {
+    background: rgba(80,10,0,0.4);
+    border: 1px solid rgba(180,60,30,0.35);
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 15px;
+    color: #d48060;
+    margin-bottom: 20px;
+  }
+
+  .weakness-box span { color: #f09060; font-weight: 600; }
+
+  .scenario-btn {
+    width: 100%;
+    background: linear-gradient(135deg, rgba(180,90,0,0.7), rgba(120,50,0,0.8));
+    border: 1px solid rgba(240,160,30,0.6);
+    color: #f5e6c8;
+    padding: 14px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-family: 'Cinzel', serif;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .scenario-btn::after { content: ' ⚔️'; }
+  .scenario-btn:hover {
+    background: linear-gradient(135deg, rgba(220,110,0,0.8), rgba(160,70,0,0.9));
+    box-shadow: 0 4px 16px rgba(240,100,0,0.35);
+    transform: translateY(-1px);
+  }
+
+  .scenario-box {
+    background: rgba(20,10,0,0.8);
+    border: 1px solid rgba(240,160,30,0.3);
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    font-size: 17px;
+    line-height: 1.7;
+    color: #e0c898;
+    font-style: italic;
+    text-align: center;
+  }
+
+  .outcome-box {
+    background: rgba(30,60,10,0.5);
+    border: 1px solid rgba(80,180,40,0.4);
+    border-radius: 10px;
+    padding: 18px;
+    margin-bottom: 22px;
+    font-size: 16px;
+    line-height: 1.6;
+    color: #b8e090;
+  }
+
+  .outcome-title {
+    font-family: 'Cinzel', serif;
+    font-size: 14px;
+    color: #90e040;
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+  }
+
+  .btn-row { display: flex; gap: 12px; flex-wrap: wrap; }
+
+  .replay-btn {
+    flex: 1;
+    background: rgba(40,60,20,0.7);
+    border: 1px solid rgba(80,180,40,0.5);
+    color: #90e040;
+    padding: 12px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Crimson Text', serif;
+    font-size: 15px;
+    transition: all 0.2s;
+    text-align: center;
+  }
+  .replay-btn:hover { background: rgba(60,90,30,0.8); }
+
+  .stars-display {
+    color: #f0c060;
+    font-size: 22px;
+    text-align: center;
+    margin-bottom: 8px;
+    letter-spacing: 2px;
+  }
+
+  .power-bar-wrap { margin-bottom: 6px; }
+  .power-label { font-size: 13px; color: #a07840; margin-bottom: 3px; display: flex; justify-content: space-between; }
+  .power-bar { height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden; }
+  .power-fill { height: 100%; border-radius: 3px; transition: width 0.8s ease; }
+</style>
+
+<div class="app">
+  <div class="stars"></div>
+
+  <!-- SCREEN 1: Home -->
+  <div class="screen active" id="screen-home">
+    <h1>🐉 Dragon Rider</h1>
+    <p class="subtitle">Choose your dragon, brave Viking!</p>
+    <div class="dragon-grid" id="dragon-grid"></div>
+  </div>
+
+  <!-- SCREEN 2: Dragon Profile -->
+  <div class="screen" id="screen-profile">
+    <button class="home-btn" onclick="goHome()">⬅ Back to all dragons</button>
+    <div class="dragon-hero">
+      <span class="dragon-hero-emoji" id="prof-emoji"></span>
+      <div class="dragon-title" id="prof-name"></div>
+      <div class="dragon-subtitle" id="prof-class"></div>
+    </div>
+
+    <div style="margin-bottom:12px;">
+      <div id="prof-bars"></div>
+    </div>
+
+    <div class="abilities-box">
+      <div class="abilities-title">⚡ SPECIAL ABILITIES</div>
+      <div id="prof-abilities"></div>
+    </div>
+    <div class="weakness-box" id="prof-weakness"></div>
+    <button class="scenario-btn" onclick="goScenario()">Send into Battle</button>
+  </div>
+
+  <!-- SCREEN 3: Scenario + Outcome -->
+  <div class="screen" id="screen-scenario">
+    <button class="back-btn" onclick="goProfile()">⬅ Back</button>
+    <div class="scenario-box" id="scenario-text"></div>
+    <div class="stars-display" id="stars-display"></div>
+    <div class="outcome-box">
+      <div class="outcome-title">🏆 WHAT HAPPENED</div>
+      <div id="outcome-text"></div>
+    </div>
+    <div class="btn-row">
+      <button class="replay-btn" onclick="goScenario()">🎲 New Adventure</button>
+      <button class="replay-btn" onclick="goHome()" style="border-color:rgba(240,160,30,0.4);color:#d4a96a;">🏠 Home</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const dragons = [
+  {
+    id: 'night-fury',
+    name: 'Night Fury',
+    realName: 'Toothless',
+    emoji: '🖤',
+    dragonEmoji: '🦎',
+    class: 'Strike Class • Ridden by Hiccup',
+    color: '#333',
+    tagline: 'The fastest, most powerful dragon alive',
+    stats: { speed: 10, fire: 9, strength: 8, stealth: 10 },
+    abilities: [
+      { icon: '💥', label: 'Plasma Blasts', desc: 'Fires explosive blue-black plasma bolts with pinpoint accuracy' },
+      { icon: '⚡', label: 'Lightning Speed', desc: 'Faster than any dragon — can fly faster than the speed of sound!' },
+      { icon: '🔊', label: 'Echolocation', desc: 'Finds his way in pitch black darkness using sound, like a bat' },
+      { icon: '🫥', label: 'Stealth Flight', desc: 'Jet-black scales make him nearly invisible at night' },
+      { icon: '👑', label: 'Alpha Power', desc: 'As the Dragon Alpha, he can command ALL other dragons' }
+    ],
+    weakness: '⚠️ Weakness: Cannot fly without both tail fins — he needs Hiccup to steer!',
+    scenarios: [
+      { scene: 'A giant sea serpent rises from the depths and blocks the harbor of Berk!', outcomes: ['Toothless dives at blinding speed and fires three plasma blasts — BOOM! The serpent crashes back into the waves. Berk is safe! Hiccup pumps his fist in the air.', 'Toothless uses echolocation to find the serpent\'s weak spot in the dark waters, then fires one perfect plasma bolt. Direct hit! The serpent flees and never returns.'] },
+      { scene: 'A band of dragon hunters has captured three baby dragons and is escaping on a ship!', outcomes: ['Toothless swoops low, invisible in the night sky. He fires a warning blast across the bow and the hunters leap overboard in terror. The baby dragons are freed!', 'Hiccup and Toothless race ahead of the ship, then Toothless unleashes his Alpha roar. Every dragon on the ship turns against the hunters instantly. Victory!'] },
+      { scene: 'A volcano on a nearby island is about to erupt and a village of people is trapped!', outcomes: ['Toothless flies at top speed, creating a sonic boom that blows the ash cloud sideways, opening a safe path for the villagers to escape!', 'Toothless fires plasma blasts to carve a tunnel through the rock, creating an escape route in seconds. Everyone gets out just in time!'] }
+    ]
+  },
+  {
+    id: 'deadly-nadder',
+    name: 'Deadly Nadder',
+    realName: 'Stormfly',
+    emoji: '💙',
+    dragonEmoji: '🦕',
+    class: 'Tracker Class • Ridden by Astrid',
+    tagline: 'Spiky, speedy, and secretly loves chicken',
+    stats: { speed: 8, fire: 9, strength: 7, stealth: 5 },
+    abilities: [
+      { icon: '🔥', label: 'Magnesium Fire', desc: 'Hottest fire of ANY dragon — can melt stone and metal in seconds!' },
+      { icon: '🪡', label: 'Spine Shot', desc: 'Launches razor-sharp spines from her tail like a machine gun' },
+      { icon: '👃', label: 'Super Smell', desc: 'Can track anything by smell — she never loses a trail' },
+      { icon: '🐔', label: 'Chicken Boost', desc: 'Eating chicken gives her a massive speed burst (her secret power!)' },
+      { icon: '💅', label: 'Tail Whip', desc: 'Her powerful tail knocks enemies flying like bowling pins' }
+    ],
+    weakness: '⚠️ Weakness: Has a blind spot directly in front of her nose — sneak up there and she can\'t see you!',
+    scenarios: [
+      { scene: 'A pack of wild dragons is stealing fish from the village of Berk!', outcomes: ['Stormfly fires her magnesium flame and the wild dragons scatter instantly — none of them have ever felt heat that intense before. Berk\'s fish supply is saved!', 'Astrid commands "Spine Shot!" Stormfly launches a volley of tail spines that pin the dragons\' nets to the ground. The fish tumble free and the thieves flee!'] },
+      { scene: 'A mysterious fog has rolled in and a ship is about to crash on the rocks!', outcomes: ['Stormfly uses her incredible sense of smell to track the sailors through the fog and guide them to safety. Her nose is better than any lantern!', 'Stormfly blasts a massive fireball into the sky — so bright it lights up the whole sea like a beacon. The sailors see the rocks and steer clear just in time!'] },
+      { scene: 'An enemy tribe wants to race dragons and claim they\'re the best riders!', outcomes: ['Astrid gives Stormfly a piece of chicken right before the race. With her secret speed boost, Stormfly blazes past every other dragon and wins by a mile!', 'Stormfly launches spines to pop the rival dragon\'s saddle, then rockets past them with her magnesium afterburner. First place — no contest!'] }
+    ]
+  },
+  {
+    id: 'hideous-zippleback',
+    name: 'Hideous Zippleback',
+    realName: 'Barf & Belch',
+    emoji: '💚',
+    dragonEmoji: '🐍',
+    class: 'Mystery Class • Ridden by Ruffnut & Tuffnut',
+    tagline: 'Two heads, twice the trouble, and a HUGE explosion',
+    stats: { speed: 6, fire: 8, strength: 7, stealth: 7 },
+    abilities: [
+      { icon: '☁️', label: 'Gas Cloud', desc: 'Barf breathes thick green explosive gas that fills the whole area' },
+      { icon: '💥', label: 'Spark Ignite', desc: 'Belch creates a spark — combined with Barf\'s gas: KABOOM!' },
+      { icon: '🤝', label: 'Double Heads', desc: 'Two heads can look in different directions and confuse any enemy' },
+      { icon: '🌫️', label: 'Smoke Screen', desc: 'Their gas cloud is so thick it hides an entire fleet of ships' },
+      { icon: '🔄', label: 'Stretchy Neck', desc: 'Their long necks can reach into caves and around corners' }
+    ],
+    weakness: '⚠️ Weakness: The two heads argue with each other — sometimes they go in opposite directions at the worst moment!',
+    scenarios: [
+      { scene: 'A whole army of enemy soldiers is marching toward the village!', outcomes: ['Barf breathes an enormous cloud of green gas across the field. Belch sparks — BOOM! A massive explosion sends the whole army running. Not a single Viking got hurt!', 'The twins disagree on tactics (as always) but accidentally create the perfect trap — Barf\'s gas flows into a canyon, Belch sparks from above. The explosion echoes for miles!'] },
+      { scene: 'A fleet of pirate ships has surrounded Berk from the sea!', outcomes: ['Barf releases a thick gas cloud across all the ships. The pirates can\'t see a thing! Then Belch sparks — every ship catches fire at once. The pirates surrender immediately.', 'Ruffnut and Tuffnut fly low over the water. Barf fills the lead ship with gas while Belch sparks from a distance. The resulting explosion creates a huge wave that tips all the ships over!'] },
+      { scene: 'The twins have gotten Barf & Belch stuck in a cave while exploring!', outcomes: ['Belch creates just a small spark inside the cave — the tiny bit of Barf\'s gas creates a controlled explosion that blasts open the cave wall. They tumble out laughing!', 'Barf uses his stretchy neck to reach around a boulder and push it free. Then both heads work together (for once!) to dig their way out. They argue about whose idea it was for the next week.'] }
+    ]
+  },
+  {
+    id: 'scauldron',
+    name: 'Scauldron',
+    realName: 'Scauldy',
+    emoji: '🌊',
+    dragonEmoji: '🦭',
+    class: 'Tidal Class • Ocean Dragon',
+    tagline: 'Boils ocean water in its belly and blasts it out!',
+    stats: { speed: 6, fire: 0, strength: 9, stealth: 6 },
+    abilities: [
+      { icon: '♨️', label: 'Boiling Water Blast', desc: 'Sucks in seawater, boils it in its belly, then blasts super-hot steam and water at enemies!' },
+      { icon: '☠️', label: 'Deadly Venom', desc: 'Has venomous teeth — its venom is the only cure for the Blue Oleander poison!' },
+      { icon: '🌊', label: 'Ocean Master', desc: 'Huge and powerful in water — can swim at incredible speed and crush ships with its tail' },
+      { icon: '🫀', label: 'Elastic Jaw', desc: 'Its lower jaw stretches like a pelican to scoop up huge amounts of water as ammunition' },
+      { icon: '🎵', label: 'Sentimental Side', desc: 'Loves anything that smells like the ocean — and calms down when someone sings to it!' }
+    ],
+    weakness: '⚠️ Weakness: Must stay near water or its skin dries out and it loses its water-blasting power. No water = no weapon!',
+    scenarios: [
+      { scene: 'A giant enemy warship is sailing toward Berk armed with catapults!', outcomes: ['The Scauldron rises from the deep and releases a torrent of scalding water directly onto the catapults — the wood warps and the ropes snap instantly. The ship is dead in the water!', 'The Scauldron swims under the ship at full speed and slaps its enormous tail against the hull. The impact cracks the wood right open. The crew abandons ship immediately!'] },
+      { scene: 'A poisonous Blue Oleander plant has made all the dragons of Berk sick!', outcomes: ['Hiccup bravely captures the Scauldron to extract its venom — the only known antidote! One dose per dragon and they\'re all cured. The Scauldron turns out to be oddly grateful.', 'The Scauldron agrees to help after Ruffnut sings to it (badly). It bites each sick dragon just enough to deliver the antidote. Every dragon recovers by morning!'] },
+      { scene: 'Enemy ships are trying to smuggle stolen dragon eggs across the sea!', outcomes: ['The Scauldron blasts boiling water at the ships from below — the crew can\'t even look over the side without getting scalded! They drop the eggs overboard into the Scauldron\'s waiting flippers.', 'The Scauldron herds all the enemy ships into a cove by circling them, then blasts steam until the sailors are completely confused. Hiccup swoops in on Toothless and retrieves every single egg!'] }
+    ]
+  },
+  {
+    id: 'monstrous-nightmare',
+    name: 'Monstrous Nightmare',
+    realName: 'Hookfang',
+    emoji: '🔴',
+    dragonEmoji: '🔥',
+    class: 'Stoker Class • Ridden by Snotlout',
+    tagline: 'Sets itself on FIRE — on purpose!',
+    stats: { speed: 7, fire: 10, strength: 9, stealth: 3 },
+    abilities: [
+      { icon: '🔥', label: 'Full Body Flame', desc: 'Can cover his ENTIRE body in fire — like a flying fireball!' },
+      { icon: '🛢️', label: 'Kerosene Fire', desc: 'His flames spread like liquid fire and stick to anything they touch' },
+      { icon: '💪', label: 'Raw Power', desc: 'One of the strongest dragons alive — can carry two full-grown Vikings with ease' },
+      { icon: '🦷', label: 'Retractable Claws', desc: 'Massive claws that can grip onto cliff faces, ships, even other dragons' },
+      { icon: '😤', label: 'Intimidation', desc: 'His flaming body display terrifies almost every creature alive' }
+    ],
+    weakness: '⚠️ Weakness: Hot-headed and stubborn — he sometimes ignores Snotlout and does whatever he wants at the worst time!',
+    scenarios: [
+      { scene: 'A huge ice troll is blocking the only mountain pass in the middle of winter!', outcomes: ['Hookfang lights himself fully on fire and charges the ice troll head-on. The heat is so intense that the troll melts away before Hookfang even reaches it. Pass is open!', 'Snotlout aims Hookfang\'s kerosene fire at the base of the ice blocking the pass. The sticky flames cling and burn until a huge chunk falls away. The villagers can get through!'] },
+      { scene: 'The Monstrous Nightmare Training Arena has gone wrong — five wild dragons are loose in the village!', outcomes: ['Hookfang lights up his entire body and walks calmly toward the wild dragons. They take one look at the living fireball and immediately go still. He\'s the biggest, baddest dragon here.', 'Hookfang roars a huge blast of fire into the air. The shockwave of heat and sound is enough to send all five wild dragons scrambling back into the arena. Snotlout takes full credit.'] },
+      { scene: 'A mysterious dragon thief has stolen all of Berk\'s saddles and riding gear!', outcomes: ['Hookfang uses his incredible nose to track the thief\'s heat trail across the island. Then he corners the thief against a cliff and breathes a small warning flame. Everything is returned immediately.', 'Hookfang just decides to set the thief\'s hideout on fire. It works. Snotlout is slightly embarrassed but the saddles are all fine (mostly).'] }
+    ]
+  },
+  {
+    id: 'gronckle',
+    name: 'Gronckle',
+    realName: 'Meatlug',
+    emoji: '🟤',
+    dragonEmoji: '🪨',
+    class: 'Boulder Class • Ridden by Fishlegs',
+    tagline: 'Eats rocks and shoots lava — and gives the best dragon hugs',
+    stats: { speed: 4, fire: 7, strength: 10, stealth: 2 },
+    abilities: [
+      { icon: '🪨', label: 'Rock Eating', desc: 'Eats boulders, gravel, and rocks — then melts them inside her stomach!' },
+      { icon: '🌋', label: 'Lava Blast', desc: 'Spits molten lava blobs that stick and burn through almost anything' },
+      { icon: '⚗️', label: 'Gronckle Iron', desc: 'Can make the strongest metal in the world by eating the right mix of rocks!' },
+      { icon: '🛡️', label: 'Iron Scales', desc: 'Her thick rocky hide makes her nearly impossible to hurt' },
+      { icon: '😴', label: 'Hover Sleep', desc: 'She can snore-hover in place — the only dragon that sleeps while flying' }
+    ],
+    weakness: '⚠️ Weakness: She\'s very slow and round — the easiest dragon to outrun, but impossible to stop once she charges!',
+    scenarios: [
+      { scene: 'The village blacksmith forge has run out of metal and can\'t make weapons!', outcomes: ['Meatlug happily munches a specific combination of rocks that Fishlegs has memorized. She spits out the world\'s strongest Gronckle Iron — enough to re-arm all of Berk in one afternoon!', 'Meatlug eats through a collapsed mineshaft to reveal a buried vein of iron ore. Then she smelts it on the spot with her lava blasts. Fishlegs takes detailed notes on the whole process.'] },
+      { scene: 'A rockslide is heading toward a group of villagers in the valley below!', outcomes: ['Meatlug flies straight into the rockslide and starts eating rocks mid-air — she\'s the only dragon that can do this! She clears a safe path before the villagers are even in danger.', 'Meatlug fires lava blobs at the largest boulders, splitting them into pebbles before they pick up speed. The tiny pieces are harmless by the time they reach the valley.'] },
+      { scene: 'An enemy tribe has a castle with walls so thick no weapon can break through!', outcomes: ['Meatlug eats her way through the castle wall — stone by stone. It takes a while. But eventually a Meatlug-shaped hole appears, and the defenders stare in shock as Fishlegs waves hello from the other side.', 'Meatlug fires lava blobs at the castle gates for ten minutes straight. The iron melts, the wood burns, and the whole gate collapses. Fishlegs had calculated the exact amount of blasts needed.'] }
+    ]
+  }
+];
+
+let selectedDragon = null;
+let currentScenarioIndex = 0;
+
+function goHome() {
+  showScreen('screen-home');
+}
+
+function goProfile() {
+  showScreen('screen-profile');
+}
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function pickDragon(dragon) {
+  selectedDragon = dragon;
+  currentScenarioIndex = Math.floor(Math.random() * dragon.scenarios.length);
+
+  document.getElementById('prof-emoji').textContent = dragon.dragonEmoji;
+  document.getElementById('prof-name').textContent = dragon.name + (dragon.realName ? ' — ' + dragon.realName : '');
+  document.getElementById('prof-class').textContent = dragon.class;
+
+  const barsEl = document.getElementById('prof-bars');
+  const statLabels = { speed: 'Speed', fire: dragon.id === 'scauldron' ? 'Water Blast' : 'Fire Power', strength: 'Strength', stealth: 'Stealth' };
+  const statColors = { speed: '#60a8f0', fire: '#f06030', strength: '#d0a030', stealth: '#60c080' };
+  barsEl.innerHTML = Object.entries(dragon.stats).map(([k, v]) => `
+    <div class="power-bar-wrap">
+      <div class="power-label"><span>${statLabels[k]}</span><span>${v}/10</span></div>
+      <div class="power-bar"><div class="power-fill" style="width:${v*10}%;background:${statColors[k]};"></div></div>
+    </div>
+  `).join('');
+
+  const abEl = document.getElementById('prof-abilities');
+  abEl.innerHTML = dragon.abilities.map(a => `
+    <div class="ability-row">
+      <span class="ability-icon">${a.icon}</span>
+      <span class="ability-text"><strong>${a.label}:</strong> ${a.desc}</span>
+    </div>
+  `).join('');
+
+  document.getElementById('prof-weakness').innerHTML = dragon.weakness;
+
+  showScreen('screen-profile');
+}
+
+function goScenario() {
+  const dragon = selectedDragon;
+  const scenarios = dragon.scenarios;
+  currentScenarioIndex = (currentScenarioIndex + 1) % scenarios.length;
+  if (Math.random() < 0.5) currentScenarioIndex = Math.floor(Math.random() * scenarios.length);
+  const scenario = scenarios[currentScenarioIndex];
+  const outcome = scenario.outcomes[Math.floor(Math.random() * scenario.outcomes.length)];
+  const stars = Math.floor(Math.random() * 2) + 4;
+  document.getElementById('scenario-text').textContent = '🌩️ ' + scenario.scene;
+  document.getElementById('stars-display').textContent = '⭐'.repeat(stars) + (stars < 5 ? '☆'.repeat(5-stars) : '');
+  document.getElementById('outcome-text').textContent = outcome;
+  showScreen('screen-scenario');
+}
+
+function buildGrid() {
+  const grid = document.getElementById('dragon-grid');
+  grid.innerHTML = dragons.map(d => `
+    <div class="dragon-card" onclick="pickDragon(${JSON.stringify(d).replace(/"/g,'&quot;')})">
+      <span class="dragon-emoji">${d.dragonEmoji}</span>
+      <div class="dragon-name">${d.name}</div>
+      <div class="dragon-class">${d.class.split('•')[0].trim()}</div>
+      <div class="dragon-tagline">${d.tagline}</div>
+    </div>
+  `).join('');
+  grid.querySelectorAll('.dragon-card').forEach((card, i) => {
+    card.onclick = () => pickDragon(dragons[i]);
+  });
+}
+
+buildGrid();
+</script>
