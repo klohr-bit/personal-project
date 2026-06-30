@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scenario-Based Learning Without the Branching Nightmare — Kimberly Lohr</title>
+<meta name="description" content="Build effective scenario-based practice and assessment in an afternoon. A course for HR pros and instructional designers who want the payoff of scenario learning without the branching maze.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#2A2D6E;
+    --navy-deep:#1C1E4A;
+    --peri:#8B85D9;
+    --peri-soft:#B7B2EC;
+    --paper:#F7F6F2;
+    --paper-warm:#EFEDF6;
+    --ink:#22243F;
+    --ink-soft:#55576F;
+    --line:#D9D7E8;
+    --white:#FFFFFF;
+    --maxw:1080px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Inter',system-ui,sans-serif;
+    color:var(--ink);
+    background:var(--paper);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{font-family:'Fraunces',Georgia,serif;line-height:1.08;font-weight:600;letter-spacing:-0.01em}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px}
+  .eyebrow{
+    font-size:.74rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--peri);font-family:'Inter',sans-serif;
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    background:var(--navy);
+    color:var(--white);
+    padding:74px 0 86px;
+    position:relative;
+    overflow:hidden;
+  }
+  .hero .wrap{position:relative;z-index:2}
+  .brandmark{
+    font-family:'Fraunces',serif;font-weight:600;font-size:1.02rem;
+    color:var(--peri-soft);letter-spacing:.01em;margin-bottom:54px;
+    display:flex;align-items:center;gap:9px;
+  }
+  .brandmark .dot{width:7px;height:7px;border-radius:50%;background:var(--peri);display:inline-block}
+  .hero h1{
+    font-size:clamp(2.3rem,5.4vw,4rem);
+    color:var(--white);
+    max-width:14ch;
+    margin-bottom:22px;
+    font-weight:600;
+  }
+  .hero h1 .turn{color:var(--peri-soft);font-style:italic}
+  .hero p.lede{
+    font-size:clamp(1.05rem,1.7vw,1.28rem);
+    color:#D8D7EC;max-width:46ch;margin-bottom:36px;font-weight:400;
+  }
+  .cta-row{display:flex;flex-wrap:wrap;gap:14px;align-items:center}
+  .btn{
+    display:inline-block;font-family:'Inter',sans-serif;font-weight:600;font-size:1rem;
+    padding:15px 30px;border-radius:2px;text-decoration:none;transition:transform .15s ease,box-shadow .15s ease;
+    cursor:pointer;border:none;
+  }
+  .btn-primary{background:var(--peri);color:var(--navy-deep)}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(139,133,217,.35)}
+  .btn-ghost{color:#D8D7EC;border:1px solid rgba(216,215,236,.32);background:transparent}
+  .btn-ghost:hover{border-color:var(--peri-soft);color:#fff}
+
+  /* hero signature: tangle -> line */
+  .signature{
+    position:absolute;right:-40px;top:0;bottom:0;width:54%;
+    z-index:1;opacity:.9;pointer-events:none;
+  }
+  @media(max-width:860px){.signature{opacity:.16;width:100%;right:0}}
+  .path-tangle{fill:none;stroke:var(--peri);stroke-width:2;opacity:.55}
+  .path-clean{fill:none;stroke:var(--peri-soft);stroke-width:3.4}
+  .node{fill:var(--peri)}
+  .node-end{fill:#fff}
+  .dash{stroke-dasharray:6 7;opacity:.4}
+
+  /* ---------- PROBLEM ---------- */
+  .problem{padding:84px 0 70px;background:var(--paper)}
+  .problem .eyebrow{margin-bottom:18px}
+  .problem h2{font-size:clamp(1.7rem,3.2vw,2.5rem);max-width:20ch;margin-bottom:26px;color:var(--navy)}
+  .lede-cols{display:grid;grid-template-columns:1fr 1fr;gap:38px;margin-top:8px}
+  @media(max-width:760px){.lede-cols{grid-template-columns:1fr;gap:20px}}
+  .lede-cols p{font-size:1.06rem;color:var(--ink-soft)}
+  .lede-cols p strong{color:var(--ink);font-weight:600}
+  .pullback{
+    margin-top:46px;border-left:3px solid var(--peri);padding:6px 0 6px 24px;
+    font-family:'Fraunces',serif;font-size:clamp(1.25rem,2.4vw,1.7rem);
+    color:var(--navy);font-weight:500;line-height:1.25;max-width:30ch;
+  }
+
+  /* ---------- SHIFT (before/after) ---------- */
+  .shift{background:var(--navy);color:#fff;padding:72px 0}
+  .shift .eyebrow{margin-bottom:30px;display:block;text-align:center}
+  .shift-grid{display:grid;grid-template-columns:1fr auto 1fr;gap:0;align-items:stretch}
+  @media(max-width:760px){.shift-grid{grid-template-columns:1fr}}
+  .shift-card{padding:30px 30px}
+  .shift-card h3{font-size:1.18rem;margin-bottom:14px;font-weight:600}
+  .shift-card.old h3{color:#A9A8C8}
+  .shift-card.new h3{color:var(--peri-soft)}
+  .shift-card ul{list-style:none}
+  .shift-card li{padding:9px 0;font-size:1rem;color:#CFCEE4;border-bottom:1px solid rgba(255,255,255,.08);display:flex;gap:11px;align-items:flex-start}
+  .shift-card li:last-child{border-bottom:none}
+  .shift-card .mark{flex:none;margin-top:2px}
+  .old .mark{color:#7B7AA0}
+  .new .mark{color:var(--peri)}
+  .shift-arrow{display:flex;align-items:center;justify-content:center;padding:0 8px;color:var(--peri);font-size:1.6rem}
+  @media(max-width:760px){.shift-arrow{padding:14px 0;transform:rotate(90deg)}}
+  .shift-divider{border-left:1px solid rgba(255,255,255,.12)}
+  @media(max-width:760px){.shift-divider{border-left:none}}
+
+  /* ---------- LESSONS ---------- */
+  .lessons{padding:84px 0;background:var(--paper)}
+  .lessons .eyebrow{margin-bottom:16px}
+  .lessons h2{font-size:clamp(1.7rem,3.2vw,2.5rem);color:var(--navy);margin-bottom:8px;max-width:18ch}
+  .lessons .sub{color:var(--ink-soft);font-size:1.05rem;margin-bottom:46px;max-width:52ch}
+  .lesson{
+    display:grid;grid-template-columns:64px 1fr;gap:24px;
+    padding:26px 0;border-top:1px solid var(--line);align-items:start;
+  }
+  .lesson:last-of-type{border-bottom:1px solid var(--line)}
+  .lesson .num{
+    font-family:'Fraunces',serif;font-size:2rem;font-weight:600;color:var(--peri);
+    line-height:1;padding-top:2px;
+  }
+  .lesson h3{font-size:1.22rem;color:var(--navy);margin-bottom:7px;font-weight:600}
+  .lesson p{color:var(--ink-soft);font-size:1.02rem;max-width:60ch}
+  .lesson .out{
+    display:inline-block;margin-top:11px;font-size:.82rem;font-weight:600;
+    color:var(--navy);background:var(--paper-warm);padding:5px 12px;border-radius:2px;
+    font-family:'Inter',sans-serif;
+  }
+  .lesson .out span{color:var(--peri);font-weight:600}
+
+  /* ---------- FORWHO ---------- */
+  .forwho{padding:78px 0;background:var(--paper-warm)}
+  .forwho h2{font-size:clamp(1.6rem,3vw,2.3rem);color:var(--navy);margin-bottom:30px;max-width:16ch}
+  .who-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  @media(max-width:760px){.who-grid{grid-template-columns:1fr}}
+  .who-card{background:var(--white);padding:26px 24px;border-radius:3px;border:1px solid var(--line)}
+  .who-card .k{font-family:'Fraunces',serif;font-size:1.08rem;color:var(--navy);font-weight:600;margin-bottom:8px}
+  .who-card p{color:var(--ink-soft);font-size:.98rem}
+
+  /* ---------- TAKEAWAY ---------- */
+  .takeaway{padding:80px 0;background:var(--paper)}
+  .takeaway-inner{
+    background:var(--navy);border-radius:5px;padding:clamp(34px,5vw,58px);
+    color:#fff;display:grid;grid-template-columns:1.3fr 1fr;gap:40px;align-items:center;
+  }
+  @media(max-width:760px){.takeaway-inner{grid-template-columns:1fr;gap:26px}}
+  .takeaway h2{font-size:clamp(1.6rem,3vw,2.3rem);color:#fff;margin-bottom:16px;max-width:18ch}
+  .takeaway p{color:#D2D1E8;font-size:1.06rem;max-width:42ch}
+  .artifact{
+    border:1px solid rgba(183,178,236,.4);border-radius:4px;padding:22px;background:rgba(255,255,255,.04)
+  }
+  .artifact .label{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--peri-soft);font-weight:600;margin-bottom:14px}
+  .artifact .doc{display:flex;align-items:center;gap:13px;padding:11px 0;border-bottom:1px solid rgba(255,255,255,.1);font-size:.95rem;color:#E4E3F2}
+  .artifact .doc:last-child{border-bottom:none}
+  .artifact .doc svg{flex:none}
+
+  /* ---------- CTA / SIGNUP ---------- */
+  .signup{padding:84px 0 90px;background:var(--navy-deep);color:#fff;text-align:center}
+  .signup .eyebrow{color:var(--peri-soft);margin-bottom:18px}
+  .signup h2{font-size:clamp(1.8rem,3.6vw,2.7rem);color:#fff;margin-bottom:16px;max-width:20ch;margin-left:auto;margin-right:auto}
+  .signup p{color:#C9C8E2;font-size:1.08rem;max-width:44ch;margin:0 auto 32px}
+  .form-row{display:flex;gap:10px;max-width:440px;margin:0 auto;flex-wrap:wrap;justify-content:center}
+  .form-row input{
+    flex:1;min-width:220px;padding:15px 18px;border-radius:2px;border:1px solid rgba(255,255,255,.2);
+    background:rgba(255,255,255,.06);color:#fff;font-family:'Inter',sans-serif;font-size:1rem;
+  }
+  .form-row input::placeholder{color:#9b9ac0}
+  .form-row input:focus{outline:2px solid var(--peri);outline-offset:1px;border-color:transparent}
+  .form-note{font-size:.84rem;color:#8584ac;margin-top:16px}
+
+  /* ---------- FOOTER ---------- */
+  footer{background:var(--navy-deep);color:#8584ac;padding:30px 0 44px;text-align:center;font-size:.86rem;border-top:1px solid rgba(255,255,255,.08)}
+  footer a{color:var(--peri-soft);text-decoration:none}
+  footer a:hover{text-decoration:underline}
+
+  @media(prefers-reduced-motion:no-preference){
+    .reveal{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease}
+    .reveal.in{opacity:1;transform:none}
+    .draw{stroke-dasharray:1400;stroke-dashoffset:1400;animation:draw 2.4s ease forwards .3s}
+    @keyframes draw{to{stroke-dashoffset:0}}
+  }
+  :focus-visible{outline:2px solid var(--peri);outline-offset:2px}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero">
+  <svg class="signature" viewBox="0 0 600 560" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+    <!-- tangle of branching paths on the left, resolving to one clean line on the right -->
+    <path class="path-tangle draw" d="M30,280 C90,180 120,180 170,210 C210,234 200,300 250,300"/>
+    <path class="path-tangle draw" d="M30,280 C90,380 120,380 170,350 C210,326 200,260 250,300"/>
+    <path class="path-tangle draw" d="M170,210 C200,150 240,120 280,150 C320,178 280,230 250,300"/>
+    <path class="path-tangle draw" d="M170,350 C200,410 240,440 280,410 C320,382 280,330 250,300"/>
+    <path class="path-tangle draw dash" d="M90,230 C140,250 150,250 200,250"/>
+    <path class="path-tangle draw dash" d="M90,330 C140,310 150,310 200,310"/>
+    <circle class="node" cx="30" cy="280" r="6"/>
+    <circle class="node" cx="170" cy="210" r="5"/>
+    <circle class="node" cx="170" cy="350" r="5"/>
+    <circle class="node" cx="280" cy="150" r="5"/>
+    <circle class="node" cx="280" cy="410" r="5"/>
+    <!-- convergence point -->
+    <circle class="node" cx="250" cy="300" r="7"/>
+    <!-- clean single line out -->
+    <path class="path-clean draw" d="M250,300 L560,300"/>
+    <circle class="node-end" cx="560" cy="300" r="8"/>
+    <circle cx="560" cy="300" r="14" fill="none" stroke="#B7B2EC" stroke-width="1.5" opacity=".6"/>
+  </svg>
+
+  <div class="wrap">
+    <div class="brandmark"><span class="dot"></span>Kimberly Lohr</div>
+    <h1>Scenario-based learning, <span class="turn">without the branching nightmare.</span></h1>
+    <p class="lede">The retention payoff of putting learners in real situations — minus the endless decision trees that make it impossible to build. Start from a rubric. Write one linear scenario. Let AI do the heavy lifting.</p>
+    <div class="cta-row">
+      <a href="#signup" class="btn btn-primary">Get early access</a>
+      <a href="#lessons" class="btn btn-ghost">See what you'll build</a>
+    </div>
+  </div>
+</header>
+
+<!-- PROBLEM -->
+<section class="problem">
+  <div class="wrap reveal">
+    <span class="eyebrow">The honest problem</span>
+    <h2>Everyone knows scenarios work. Almost nobody builds them.</h2>
+    <div class="lede-cols">
+      <p>Ask a learner <strong>"what would you do?"</strong> instead of "what do you know?" and the lesson sticks in a way slides never manage. You already know this. It's not the part anyone argues with.</p>
+      <p>The part that stops people is the build. Branching scenarios mean mapping every decision path, writing a believable consequence for each wrong turn, and forcing messy choices into a gradebook. So good intentions quietly become another quiz.</p>
+    </div>
+    <p class="pullback">This course is about the way past that — not a better maze, no maze at all.</p>
+  </div>
+</section>
+
+<!-- SHIFT -->
+<section class="shift">
+  <div class="wrap reveal">
+    <span class="eyebrow">The shift</span>
+    <div class="shift-grid">
+      <div class="shift-card old">
+        <h3>The branching way</h3>
+        <ul>
+          <li><span class="mark">—</span> Map every path before you can build</li>
+          <li><span class="mark">—</span> Write consequences for choices no one picks</li>
+          <li><span class="mark">—</span> Scenario first, criteria bolted on after</li>
+          <li><span class="mark">—</span> Weeks of work, easy to abandon</li>
+        </ul>
+      </div>
+      <div class="shift-arrow" aria-hidden="true">→</div>
+      <div class="shift-card new shift-divider">
+        <h3>The rubric-first way</h3>
+        <ul>
+          <li><span class="mark">+</span> Define what good looks like, once</li>
+          <li><span class="mark">+</span> One linear scenario, one clear decision</li>
+          <li><span class="mark">+</span> Aligned to your criteria by construction</li>
+          <li><span class="mark">+</span> An afternoon, start to finished artifact</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LESSONS -->
+<section class="lessons" id="lessons">
+  <div class="wrap">
+    <div class="reveal">
+      <span class="eyebrow">The course</span>
+      <h2>Five short lessons. One finished artifact.</h2>
+      <p class="sub">Each lesson demonstrates a single move, then you do that move on your own topic. The pieces assemble into a scenario and rubric you can use the moment you finish.</p>
+    </div>
+
+    <div class="lesson reveal">
+      <div class="num">1</div>
+      <div>
+        <h3>Why linear scenarios win</h3>
+        <p>The trap, then the shortcut: a single scenario scored against a rubric captures most of the value of branching at a fraction of the effort.</p>
+        <div class="out">You leave with <span>your topic and competency chosen</span></div>
+      </div>
+    </div>
+
+    <div class="lesson reveal">
+      <div class="num">2</div>
+      <div>
+        <h3>The rubric, made simple</h3>
+        <p>Define good performance as a few observable criteria. No academic theory — just the short list that makes everything downstream line up automatically.</p>
+        <div class="out">You leave with <span>a clean rubric</span></div>
+      </div>
+    </div>
+
+    <div class="lesson reveal">
+      <div class="num">3</div>
+      <div>
+        <h3>Write the linear scenario</h3>
+        <p>One believable situation with a single decision point, engineered so the learner's choices reveal exactly what your rubric measures.</p>
+        <div class="out">You leave with <span>a scenario aligned to your rubric</span></div>
+      </div>
+    </div>
+
+    <div class="lesson reveal">
+      <div class="num">4</div>
+      <div>
+        <h3>Hand it to AI</h3>
+        <p>The mechanic you came for. Give AI the rubric and the scenario, and prompt it to flesh out the situation and score responses — anchored to your criteria. Works in any AI assistant.</p>
+        <div class="out">You leave with <span>an AI-drafted scenario and scoring setup</span></div>
+      </div>
+    </div>
+
+    <div class="lesson reveal">
+      <div class="num">5</div>
+      <div>
+        <h3>Run it as practice and assessment</h3>
+        <p>One artifact, two modes. Practice surfaces the criteria and gives feedback; assessment withholds and judges. Then calibrate until the scoring matches your judgment.</p>
+        <div class="out">You leave with <span>the finished, deployable artifact</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOR WHO -->
+<section class="forwho">
+  <div class="wrap reveal">
+    <h2>Built for people who write their own training.</h2>
+    <div class="who-grid">
+      <div class="who-card">
+        <div class="k">HR professionals</div>
+        <p>You build training without a full instructional design team, and you want practice that actually changes behavior.</p>
+      </div>
+      <div class="who-card">
+        <div class="k">Instructional designers</div>
+        <p>You want scenario-based assessment in your toolkit without the production overhead that usually kills it.</p>
+      </div>
+      <div class="who-card">
+        <div class="k">Anyone who's avoided it</div>
+        <p>You've wanted to use scenarios but bounced off branching. This is the on-ramp that doesn't require one.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TAKEAWAY -->
+<section class="takeaway">
+  <div class="wrap reveal">
+    <div class="takeaway-inner">
+      <div>
+        <span class="eyebrow" style="color:var(--peri-soft)">What you keep</span>
+        <h2>You finish with a real artifact, not notes.</h2>
+        <p>Built on your own topic, during the course. A repeatable method for the next one, and the confidence to stop dreading the build.</p>
+      </div>
+      <div class="artifact">
+        <div class="label">In your hands by the end</div>
+        <div class="doc">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#B7B2EC" stroke-width="2"><rect x="4" y="3" width="16" height="18" rx="2"/><line x1="8" y1="8" x2="16" y2="8"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="16" x2="13" y2="16"/></svg>
+          A scoring rubric for your competency
+        </div>
+        <div class="doc">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#B7B2EC" stroke-width="2"><path d="M4 5h16M4 5v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V5M9 10l3 3 3-3"/></svg>
+          A linear scenario built from it
+        </div>
+        <div class="doc">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#B7B2EC" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/></svg>
+          An AI prompt that drafts and scores it
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SIGNUP -->
+<section class="signup" id="signup">
+  <div class="wrap reveal">
+    <span class="eyebrow">Early access</span>
+    <h2>Be first to know when it opens.</h2>
+    <p>Leave your email and I'll send the launch details, plus a sample scenario and rubric to try before you buy.</p>
+    <form class="form-row" action="#" method="post" onsubmit="return false;">
+      <input type="email" name="email" placeholder="you@work.com" aria-label="Email address" required>
+      <button type="submit" class="btn btn-primary">Notify me</button>
+    </form>
+    <p class="form-note">No spam. Just the launch and the sample.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    © <span id="yr"></span> Kimberly Lohr · <a href="#signup">Get early access</a>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('yr').textContent = new Date().getFullYear();
+  // scroll reveal
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const obs = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); obs.unobserve(e.target);} });
+    },{threshold:.12});
+    document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+  } else {
+    document.querySelectorAll('.reveal').forEach(el=>el.classList.add('in'));
+  }
+  // wire the email form to a mailto fallback so it does something on a static host
+  document.querySelector('.form-row').addEventListener('submit', function(){
+    const email = this.querySelector('input').value;
+    if(email){ window.location.href = 'mailto:hello@kimberlylohr.com?subject=Early%20access&body=Please%20add%20'+encodeURIComponent(email)+'%20to%20the%20launch%20list.'; }
+  });
+</script>
+</body>
+</html>
